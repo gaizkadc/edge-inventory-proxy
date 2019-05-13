@@ -9,6 +9,6 @@ FROM iron/go
 RUN mkdir /nalej
 
 # Now just add the binary
-COPY example-app /nalej/
+COPY edge-inventory-proxy /nalej/
 
-ENTRYPOINT ["./nalej/example-app"]
+ENTRYPOINT ["./nalej/edge-inventory-proxy"]

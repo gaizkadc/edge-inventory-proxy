@@ -5,7 +5,7 @@
 package commands
 
 import (
-	"github.com/nalej/golang-template/version"
+	"github.com/nalej/edge-inventory-proxy/version"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
@@ -18,14 +18,14 @@ var debugLevel bool
 var consoleLogging bool
 
 var rootCmd = &cobra.Command{
-	Use:   "example",
-	Short: "Example of a cobra command",
-	Long:  `A long explanation about what is a cobra command`,
+	Use:   "edge-inventory-proxy",
+	Short: "Edge Inventory Proxy command",
+	Long:  `Edge Inventory Proxy command`,
 	Version: "unknown-version",
 
 	Run: func(cmd *cobra.Command, args []string) {
 		SetupLogging()
-		log.Info().Msg("This is a root message")
+		cmd.Help()
 	},
 }
 

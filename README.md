@@ -259,7 +259,7 @@ spec:
     spec:
       containers:
       - name: example
-        image: nalej/example-app:v0.0.1
+        image: edge-inventory-proxy
         imagePullPolicy: Always
         securityContext:
           runAsUser: 2000
