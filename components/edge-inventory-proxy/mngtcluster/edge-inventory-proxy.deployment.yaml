@@ -1,0 +1,33 @@
+###
+# Application example
+###
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  labels:
+    cluster: management
+    component: edge-inventory-proxy
+  name: edge-inventory-proxy
+  namespace: __NPH_NAMESPACE
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      cluster: management
+      component: edge-inventory-proxy
+  template:
+    metadata:
+      labels:
+        cluster: management
+        component: edge-inventory-proxy
+    spec:
+      containers:
+      - name: edge-inventory-proxy
+        image: __NPH_REGISTRY.azurecr.io/__NPH_REGISTRY_NAMESPACE/edge-inventory-proxy:__NPH_VERSION
+        imagePullPolicy: Always
+        securityContext:
+          runAsUser: 2000
+      imagePullSecrets:
+      - name: nalej-registry
