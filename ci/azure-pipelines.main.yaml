@@ -13,9 +13,9 @@ variables:
   - name: modulePath
     value: '$(GOPATH)/src/github.com/$(Build.Repository.Name)'
   - name: appList
-    value: 'edge-inventory-proxy'
+    value: 'edge-inventory-proxy eip-sidecar'
   - name: imageList
-    value: 'edge-inventory-proxy'
+    value: 'edge-inventory-proxy eip-sidecar'
   - name: authorName
     value: ""
 
