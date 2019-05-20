@@ -17,14 +17,6 @@
   version = "v1.3.1"
 
 [[projects]]
-  digest = "1:ad92aa49f34cbc3546063c7eb2cabb55ee2278b72842eda80e2a20a8a06a8d73"
-  name = "github.com/google/uuid"
-  packages = ["."]
-  pruneopts = ""
-  revision = "0cd6bf5da1e1c83f8b45653022c74f71af0538a4"
-  version = "v1.1.1"
-
-[[projects]]
   digest = "1:870d441fe217b8e689d7949fef6e43efbc787e50f200cb1e70dbca9204a1d6be"
   name = "github.com/inconshreveable/mousetrap"
   packages = ["."]
@@ -81,12 +73,12 @@
   version = "v0.0.4"
 
 [[projects]]
-  digest = "1:4df7812b3e684f3ddaa3c829611f4ad64a40c867fecfe08791a4acd8bcbe18bf"
+  digest = "1:9ff8ea771dd5ddead9b193bfac05af6e9faf547eacced603aec24a39f50dd89d"
   name = "github.com/nalej/grpc-inventory-manager-go"
   packages = ["."]
   pruneopts = ""
-  revision = "c7e08087ed8b249965674ca8872643a5d85035a1"
-  version = "v0.0.9"
+  revision = "a772b1757f891474472d50aa452220d9c16a82cf"
+  version = "v0.0.10"
 
 [[projects]]
   digest = "1:0e5100c2c9fcced5b1c0f2306742cbd44dd401cfc52a4b90678c02277fb44ac2"
@@ -105,35 +97,7 @@
   version = "v0.0.30"
 
 [[projects]]
-  digest = "1:347aace88c837e2b1b65a7c603e1b74066e3ad9c26343a2001649e3a2354591b"
-  name = "github.com/nalej/grpc-utils"
-  packages = ["pkg/conversions"]
-  pruneopts = ""
-  revision = "926e5152669ee71c0e6904055ebe6cfb5492b599"
-  version = "v1.4.0"
-
-[[projects]]
-  digest = "1:e7518fcc561ded21ecf3072857e0cd03f39346ec852fba737b581ae9942b0f6a"
-  name = "github.com/nalej/grpc-vpn-server-go"
-  packages = ["."]
-  pruneopts = ""
-  revision = "9073e7aa5351c342604e7be5fd72cbc1388ad936"
-  version = "v0.0.4"
-
-[[projects]]
-  branch = "master"
-  digest = "1:a58d10eb25b90475d259bd316fde53bb9ed2329343799b4b62b77ef0e5a3e2de"
-  name = "github.com/nalej/vpn-server"
-  packages = [
-    "internal/pkg/config",
-    "internal/pkg/entities",
-    "version",
-  ]
-  pruneopts = ""
-  revision = "d7c4ddbfe2907a0a91125794499b780c6d11b82b"
-
-[[projects]]
-  digest = "1:aed55b9be75ddc9942b4a19c2ca3c43d7c9d3f3c6b1ff372b0728c4df4037e6a"
+  digest = "1:3b6d6b1b349b7a4e3325572853b9e1f95b7f87950be55ae3317f8c91fb878d00"
   name = "github.com/rs/zerolog"
   packages = [
     ".",
@@ -142,28 +106,28 @@
     "log",
   ]
   pruneopts = ""
-  revision = "77db4b4f350e31be66a57c332acb7721cf9ff9bb"
-  version = "v1.8.0"
+  revision = "acf3980132bfcdc48638724e6e3d9e5749b85999"
+  version = "v1.14.3"
 
 [[projects]]
-  digest = "1:a1403cc8a94b8d7956ee5e9694badef0e7b051af289caad1cf668331e3ffa4f6"
+  digest = "1:78715f4ed019d19795e67eed1dc63f525461d925616b1ed02b72582c01362440"
   name = "github.com/spf13/cobra"
   packages = ["."]
   pruneopts = ""
-  revision = "ef82de70bb3f60c65fb8eebacbb2d122ef517385"
-  version = "v0.0.3"
+  revision = "67fc4837d267bc9bfd6e47f77783fcc3dffc68de"
+  version = "v0.0.4"
 
 [[projects]]
-  digest = "1:0a52bcb568386d98f4894575d53ce3e456f56471de6897bb8b9de13c33d9340e"
+  digest = "1:cbaf13cdbfef0e4734ed8a7504f57fe893d471d62a35b982bf6fb3f036449a66"
   name = "github.com/spf13/pflag"
   packages = ["."]
   pruneopts = ""
-  revision = "9a97c102cda95a86cec2345a6f09f55a939babf5"
-  version = "v1.0.2"
+  revision = "298182f68c66c05229eb03ac171abe6e309ee79a"
+  version = "v1.0.3"
 
 [[projects]]
   branch = "master"
-  digest = "1:ccd51599eb31c3ee139de1b1fca3f5d3ddaa5ab37f3a1704a2a8426c0abd1e5b"
+  digest = "1:aa38821ad1406a84f9577465ef53e56ca4d90745a710c753190bf7792d726c82"
   name = "golang.org/x/net"
   packages = [
     "context",
@@ -175,15 +139,15 @@
     "trace",
   ]
   pruneopts = ""
-  revision = "a4d6f7feada510cc50e69a37b484cb0fdc6b7876"
+  revision = "3ec19112720433827bbce8be9342797f5a6aaaf9"
 
 [[projects]]
   branch = "master"
-  digest = "1:8f9263a1e1d886efe08142f5e47c16520d614e3640f10f4e09f98949742d5818"
+  digest = "1:677902b7cbbfa124deba62fc56aaa9ec7ad76ab7c45d42f76c973d3e7a1ef109"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = ""
-  revision = "a5b02f93d862f065920dd6a40dddc66b60d0dec4"
+  revision = "61b9204099cb1bebc803c9ffb9b2d3acd9d457d9"
 
 [[projects]]
   digest = "1:740b51a55815493a8d0f2b1e0d0ae48fe48953bf7eaf3fcc4198823bf67768c0"
@@ -212,14 +176,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:8a19759d926bef22018755cf07db0b6d46d6bc87d2abbb8b2c9d50cb67724e97"
+  digest = "1:8dd1ca0dc50d8dd88324c6fe1c355a2006e312849704a702d7ca4a3bf28b065c"
   name = "google.golang.org/genproto"
-  packages = [
-    "googleapis/rpc/errdetails",
-    "googleapis/rpc/status",
-  ]
+  packages = ["googleapis/rpc/status"]
   pruneopts = ""
-  revision = "b515fa19cec88c32f305a962f34ae60068947aea"
+  revision = "bb713bdc0e5239f2b68e560efbe1c701a6fe78f9"
 
 [[projects]]
   digest = "1:afc1b03a6d5ba3cbb2e0a12133e734d472e4df3b65f06e600a3d57a4b82f26cc"
@@ -268,13 +229,11 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "github.com/google/uuid",
     "github.com/nalej/derrors",
     "github.com/nalej/grpc-common-go",
     "github.com/nalej/grpc-edge-inventory-proxy-go",
-    "github.com/nalej/grpc-utils/pkg/conversions",
-    "github.com/nalej/vpn-server/internal/pkg/config",
-    "github.com/nalej/vpn-server/internal/pkg/entities",
+    "github.com/nalej/grpc-inventory-go",
+    "github.com/nalej/grpc-inventory-manager-go",
     "github.com/rs/zerolog",
     "github.com/rs/zerolog/log",
     "github.com/spf13/cobra",

@@ -34,6 +34,13 @@ func (s *Service) Run() error {
 	}
 	s.Configuration.Print()
 
+	// connect to VPN
+	vpnErr := edge_inventory_proxy.NewVpnHelper().ConfigureLocalVPN()
+	if vpnErr != nil {
+		log.Fatal().Errs("failed to connect VPN: %v", []error{vpnErr})
+	}
+
+
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Configuration.EipPort))
 	if err != nil {
 		log.Fatal().Errs("failed to listen: %v", []error{err})
