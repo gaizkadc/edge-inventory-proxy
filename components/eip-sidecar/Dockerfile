@@ -13,6 +13,6 @@ EXPOSE 5555/tcp 5666/tcp
 RUN mkdir /nalej
 
 # Now just add the binary
-COPY eip-sidecar /nalej/
+#COPY eip-sidecar /nalej/
 
 ENTRYPOINT ["/startup.sh"]

@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	command = "/usr/bin/vpnclient/vpncmd"
+	command = "vpncmd"
 	cmdMode = "/Client"
 	hub = "/HUB:DEFAULT"
 	cmdCmd = "/cmd"
