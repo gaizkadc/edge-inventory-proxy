@@ -5,13 +5,12 @@
 package commands
 
 import (
-	"github.com/nalej/edge-inventory-proxy/internal/pkg/config"
-	"github.com/nalej/edge-inventory-proxy/internal/pkg/server/edge-inventory-proxy"
+	"github.com/nalej/edge-inventory-proxy/internal/pkg/server/eip-sidecar"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )
 
-var cfg = config.Config{}
+var cfg = eip_sidecar.Config{}
 
 var runCmd = &cobra.Command{
 	Use:   "run",
@@ -21,12 +20,12 @@ var runCmd = &cobra.Command{
 		SetupLogging()
 		log.Info().Msg("Launching gRPC EIP!")
 
-		server := edge_inventory_proxy.NewService(cfg)
+		server := eip_sidecar.NewService(cfg)
 		server.Run()
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(runCmd)
-	runCmd.Flags().IntVar(&cfg.EipPort, "port", 5544, "Port to receive management communications")
+	runCmd.Flags().StringVar(&cfg.VpnAddress, "vpnAddress", "vpn-server.nalej:5555", " VPN Server internal address with port")
 }

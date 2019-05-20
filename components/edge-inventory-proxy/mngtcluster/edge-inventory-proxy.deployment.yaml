@@ -27,7 +27,32 @@ spec:
       - name: edge-inventory-proxy
         image: __NPH_REGISTRY.azurecr.io/__NPH_REGISTRY_NAMESPACE/edge-inventory-proxy:__NPH_VERSION
         imagePullPolicy: Always
+        args:
+        - "run"
+        - "--debug"
+        - "--port=5544"
         securityContext:
           runAsUser: 2000
+      - name: eip-sidecar
+        image: __NPH_REGISTRY.azurecr.io/__NPH_REGISTRY_NAMESPACE/eip-sidecar:__NPH_VERSION
+        imagePullPolicy: Always
+        args:
+            - "run"
+            - "--debug"
+            - "--vpnAddress=vpn-server.__NPH_NAMESPACE:5555"
+        securityContext:
+          runAsUser: 0
+          capabilities:
+            add:
+              - NET_ADMIN
+              - SYS_ADMIN
+        volumeMounts:
+          - name: dev-net-tun
+            readOnly: true
+            mountPath: /dev/net/tun
       imagePullSecrets:
       - name: nalej-registry
+      volumes:
+        - name: dev-net-tun
+          hostPath:
+            path: /dev/net/tun

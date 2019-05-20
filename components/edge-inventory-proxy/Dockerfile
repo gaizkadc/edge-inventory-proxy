@@ -7,6 +7,7 @@ FROM iron/go
 
 # Now just add the binary\
 RUN mkdir /nalej
+EXPOSE 5544/tcp
 
 # Now just add the binary
 COPY edge-inventory-proxy /nalej/
