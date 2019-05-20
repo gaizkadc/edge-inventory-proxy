@@ -27,10 +27,10 @@ spec:
       - name: edge-inventory-proxy
         image: __NPH_REGISTRY.azurecr.io/__NPH_REGISTRY_NAMESPACE/edge-inventory-proxy:__NPH_VERSION
         imagePullPolicy: Always
-        - args:
-          - "run"
-          - "--debug"
-          - "port=5544"
+        args:
+        - "run"
+        - "--debug"
+        - "--port=5544"
         securityContext:
           runAsUser: 2000
       - name: eip-sidecar
