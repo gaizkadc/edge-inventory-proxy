@@ -5,13 +5,12 @@
 package commands
 
 import (
-	"github.com/nalej/edge-inventory-proxy/internal/pkg/config"
 	"github.com/nalej/edge-inventory-proxy/internal/pkg/server/eip-sidecar"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )
 
-var cfg = config.Config{}
+var cfg = eip_sidecar.Config{}
 
 var runCmd = &cobra.Command{
 	Use:   "run",
@@ -28,4 +27,5 @@ var runCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(runCmd)
+	runCmd.Flags().StringVar(&cfg.VpnAddress, "vpnAddress", "vpn-server.nalej", " VPN Server internal address with port")
 }

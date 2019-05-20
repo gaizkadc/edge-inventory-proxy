@@ -19,16 +19,15 @@ const (
 	vpnClientAddress = "localhost"
 	user = "admin"
 	password = "admin"
-	vpnServer = "/SERVER:vpn-server.svc.cluster.local:5555"
 )
 
 type VpnHelper struct{
-
+	vpnServerAddress string
 }
 
-func NewVpnHelper () *VpnHelper{
+func NewVpnHelper (dir string) *VpnHelper{
 
-	return &VpnHelper{}
+	return &VpnHelper{dir}
 }
 
 
@@ -45,6 +44,7 @@ func (j * VpnHelper) ConfigureLocalVPN () error {
 	vpnUserName := fmt.Sprintf("/USERNAME:%s", user)
 
 	// Account Create
+	vpnServer := fmt.Sprintf("/SERVER:%s", j.vpnServerAddress)
 	cmd = exec.Command(command, cmdMode, vpnClientAddress,cmdCmd, accountCreateCmd, user, vpnServer, hub, vpnUserName, nicUser)
 	err = cmd.Run()
 	if err != nil {

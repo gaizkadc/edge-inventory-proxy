@@ -1,13 +1,13 @@
 package eip_sidecar
 
-import ("github.com/nalej/edge-inventory-proxy/internal/pkg/config"
+import (
 	"github.com/rs/zerolog/log")
 
 type Service struct {
-	Configuration config.Config
+	Configuration Config
 }
 // NewService creates a new service.
-func NewService(conf config.Config) *Service {
+func NewService(conf Config) *Service {
 	return &Service{
 		conf,
 	}
@@ -15,7 +15,7 @@ func NewService(conf config.Config) *Service {
 
 func (s *Service) Run() error {
 	// connect to VPN
-	vpnErr := NewVpnHelper().ConfigureLocalVPN()
+	vpnErr := NewVpnHelper(s.Configuration.VpnAddress).ConfigureLocalVPN()
 	if vpnErr != nil {
 		log.Fatal().Errs("failed to connect VPN: %v", []error{vpnErr})
 	}
