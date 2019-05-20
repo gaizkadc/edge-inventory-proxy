@@ -43,12 +43,14 @@ func (j * VpnHelper) ConfigureLocalVPN () error {
 		log.Info().Str("error", err.Error()).Msg("error creating nicName")
 	}
 	vpnUserName := fmt.Sprintf("/USERNAME:%s", user)
+
 	// Account Create
 	cmd = exec.Command(command, cmdMode, vpnClientAddress,cmdCmd, accountCreateCmd, user, vpnServer, hub, vpnUserName, nicUser)
 	err = cmd.Run()
 	if err != nil {
 		log.Warn().Str("error", err.Error()).Msg("error creating account")
 	}
+
 	// Account PasswordSet
 	pass := fmt.Sprintf("/PASSWORD:%s", password)
 	cmd = exec.Command(command, cmdMode, vpnClientAddress,cmdCmd, accountPasswordSetCmd, password, pass, "/TYPE:standard")
@@ -56,6 +58,8 @@ func (j * VpnHelper) ConfigureLocalVPN () error {
 	if err != nil {
 		log.Warn().Str("error", err.Error()).Msg("error creating password")
 	}
+
+	// Connect
 	cmd = exec.Command(command, cmdMode, vpnClientAddress,cmdCmd, "accountConnect", user)
 	err = cmd.Run()
 	if err != nil {

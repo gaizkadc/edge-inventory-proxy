@@ -29,5 +29,10 @@ spec:
         imagePullPolicy: Always
         securityContext:
           runAsUser: 2000
+      - name: eip-sidecar
+        image: __NPH_REGISTRY.azurecr.io/__NPH_REGISTRY_NAMESPACE/eip-sidecar:__NPH_VERSION
+        imagePullPolicy: Always
+        securityContext:
+          runAsUser: 2000
       imagePullSecrets:
       - name: nalej-registry
