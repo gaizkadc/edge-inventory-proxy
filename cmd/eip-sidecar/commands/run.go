@@ -6,7 +6,7 @@ package commands
 
 import (
 	"github.com/nalej/edge-inventory-proxy/internal/pkg/config"
-	"github.com/nalej/edge-inventory-proxy/internal/pkg/server/edge-inventory-proxy"
+	"github.com/nalej/edge-inventory-proxy/internal/pkg/server/eip-sidecar"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )
@@ -21,12 +21,11 @@ var runCmd = &cobra.Command{
 		SetupLogging()
 		log.Info().Msg("Launching gRPC EIP!")
 
-		server := edge_inventory_proxy.NewService(cfg)
+		server := eip_sidecar.NewService(cfg)
 		server.Run()
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(runCmd)
-	runCmd.Flags().IntVar(&cfg.EipPort, "port", 5544, "Port to receive management communications")
 }

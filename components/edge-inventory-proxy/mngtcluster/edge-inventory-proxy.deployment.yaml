@@ -36,7 +36,10 @@ spec:
       - name: eip-sidecar
         image: __NPH_REGISTRY.azurecr.io/__NPH_REGISTRY_NAMESPACE/eip-sidecar:__NPH_VERSION
         imagePullPolicy: Always
+        args:
+          - "run"
+          - "--debug"
         securityContext:
-          runAsUser: 2000
+          runAsUser: 0
       imagePullSecrets:
       - name: nalej-registry

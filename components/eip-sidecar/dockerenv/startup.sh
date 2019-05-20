@@ -1,7 +1,3 @@
-#
-# Copyright (C) 2019 Nalej Group - All Rights Reserved
-#
-
 #!/bin/sh
 
 export PATH=/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin
@@ -11,3 +7,6 @@ vpnclient start
 
 echo "Starting EIP-sidecar..."
 /nalej/eip-sidecar $@
+
+echo "Waiting"
+sleep 6000

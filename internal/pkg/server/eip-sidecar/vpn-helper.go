@@ -1,4 +1,4 @@
-package edge_inventory_proxy
+package eip_sidecar
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	command = "/usr/bin/vpnclient/vpncmd"
+	command = "vpncmd"
 	cmdMode = "/Client"
 	hub = "/HUB:DEFAULT"
 	cmdCmd = "/cmd"
@@ -64,7 +64,7 @@ func (j * VpnHelper) ConfigureLocalVPN () error {
 	err = cmd.Run()
 	if err != nil {
 		log.Warn().Str("error", err.Error()).Msg("error connecting account")
-		return err
+		//return err
 	}
 
 	log.Info().Str("user", user).Msg("connected")
