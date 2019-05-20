@@ -27,5 +27,5 @@ var runCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(runCmd)
-	runCmd.Flags().StringVar(&cfg.VpnAddress, "vpnAddress", "vpn-server.nalej", " VPN Server internal address with port")
+	runCmd.Flags().StringVar(&cfg.VpnAddress, "vpnAddress", "vpn-server.nalej:5555", " VPN Server internal address with port")
 }

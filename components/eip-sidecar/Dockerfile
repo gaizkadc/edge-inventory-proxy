@@ -12,6 +12,6 @@ RUN chmod 0755 /startup.sh
 RUN mkdir /nalej
 
 # Now just add the binary
-#COPY eip-sidecar /nalej/
+COPY eip-sidecar /nalej/
 
 ENTRYPOINT ["/startup.sh"]
