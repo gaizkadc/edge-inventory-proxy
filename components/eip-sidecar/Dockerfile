@@ -2,7 +2,9 @@
 # Copyright (C) 2019 Nalej Group - All Rights Reserved
 #
 
-FROM siomiz/softethervpn:4.29-alpine
+FROM siomiz/softethervpn:4.29-ubuntu
+
+RUN apt-get update && apt-get install -y isc-dhcp-client
 
 RUN mkdir /config
 ADD dockerenv/startup.sh /startup.sh

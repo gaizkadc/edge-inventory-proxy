@@ -8,5 +8,11 @@ vpnclient start
 echo "Starting EIP-sidecar..."
 /nalej/eip-sidecar $@
 
-echo "Waiting"
-sleep 6000
+echo "Enabling IP forwarding..."
+echo 'net.ipv4.ip_forward=1' >> /etc/sysctl.conf
+#sysctl -p
+
+while true; do
+    echo "alive"
+    sleep 100000
+done
