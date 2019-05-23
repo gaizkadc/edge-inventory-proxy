@@ -1,4 +1,4 @@
-package eip_sidecar
+package server
 
 import (
 	"fmt"
@@ -56,7 +56,7 @@ func (h * VpnHelper) ConfigureLocalVPN () error {
 	vpnUserName := fmt.Sprintf("/USERNAME:%s", user)
 
 	// Account Create
-	vpnServer := fmt.Sprintf("/SERVER:%s", j.vpnServerAddress)
+	vpnServer := fmt.Sprintf("/SERVER:%s", h.vpnServerAddress)
 	err = h.execCmd(command, cmdMode, vpnClientAddress,cmdCmd, accountCreateCmd, user, vpnServer, hub, vpnUserName, nicUser)
 	if err != nil {
 		log.Warn().Str("error", err.Error()).Msg("error creating account")

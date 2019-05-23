@@ -5,12 +5,13 @@
 package commands
 
 import (
-	"github.com/nalej/edge-inventory-proxy/internal/pkg/server/eip-sidecar"
+	"github.com/nalej/edge-inventory-proxy/internal/app/sidecar/config"
+	"github.com/nalej/edge-inventory-proxy/internal/app/sidecar/server"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )
 
-var cfg = eip_sidecar.Config{}
+var cfg = config.Config{}
 
 var runCmd = &cobra.Command{
 	Use:   "run",
@@ -18,9 +19,9 @@ var runCmd = &cobra.Command{
 	Long:  `Launch EIP`,
 	Run: func(cmd *cobra.Command, args []string) {
 		SetupLogging()
-		log.Info().Msg("Launching gRPC EIP!")
+		log.Info().Msg("Launching sidecar!")
 
-		server := eip_sidecar.NewService(cfg)
+		server := server.NewService(cfg)
 		server.Run()
 	},
 }

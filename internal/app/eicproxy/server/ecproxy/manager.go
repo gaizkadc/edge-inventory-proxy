@@ -2,10 +2,10 @@
  * Copyright (C) 2019 Nalej - All Rights Reserved
  */
 
-package edge_inventory_proxy
+package ecproxy
 
 import (
-	"github.com/nalej/edge-inventory-proxy/internal/pkg/config"
+	"github.com/nalej/edge-inventory-proxy/internal/app/eicproxy/config"
 )
 
 // Manager structure with the entities involved in the management of VPN users
