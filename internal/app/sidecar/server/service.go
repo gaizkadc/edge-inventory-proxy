@@ -1,13 +1,14 @@
-package eip_sidecar
+package server
 
 import (
+	"github.com/nalej/edge-inventory-proxy/internal/app/sidecar/config"
 	"github.com/rs/zerolog/log")
 
 type Service struct {
-	Configuration Config
+	Configuration config.Config
 }
 // NewService creates a new service.
-func NewService(conf Config) *Service {
+func NewService(conf config.Config) *Service {
 	return &Service{
 		conf,
 	}

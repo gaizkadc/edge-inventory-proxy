@@ -1,4 +1,4 @@
-package eip_sidecar
+package config
 
 import (
 	"github.com/nalej/derrors"

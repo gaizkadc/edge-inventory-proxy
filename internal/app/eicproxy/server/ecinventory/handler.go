@@ -2,7 +2,7 @@
  * Copyright (C) 2019 Nalej - All Rights Reserved
  */
 
-package edge_inventory_proxy
+package ecinventory
 
 import (
 	"github.com/nalej/grpc-common-go"

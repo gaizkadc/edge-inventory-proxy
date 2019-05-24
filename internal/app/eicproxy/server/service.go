@@ -2,11 +2,13 @@
  * Copyright (C) 2019 Nalej - All Rights Reserved
  */
 
-package edge_inventory_proxy
+package server
 
 import (
 	"fmt"
-	"github.com/nalej/edge-inventory-proxy/internal/pkg/config"
+	"github.com/nalej/edge-inventory-proxy/internal/app/eicproxy/config"
+	"github.com/nalej/edge-inventory-proxy/internal/app/eicproxy/server/ecinventory"
+	"github.com/nalej/edge-inventory-proxy/internal/app/eicproxy/server/ecproxy"
 	"github.com/nalej/grpc-edge-inventory-proxy-go"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
@@ -40,13 +42,17 @@ func (s *Service) Run() error {
 	}
 
 	// Create handlers
-	manager := NewManager(s.Configuration)
-	handler := NewHandler(manager)
+	invManager := ecinventory.NewManager(s.Configuration)
+	invHandler := ecinventory.NewHandler(invManager)
+
+	proxyManager := ecproxy.NewManager(s.Configuration)
+	proxyHandler := ecproxy.NewHandler(proxyManager)
 
 	// gRPC Server
 	grpcServer := grpc.NewServer()
 
-	grpc_edge_inventory_proxy_go.RegisterEdgeInventoryProxyServer(grpcServer, handler)
+	grpc_edge_inventory_proxy_go.RegisterEdgeInventoryProxyServer(grpcServer, invHandler)
+	grpc_edge_inventory_proxy_go.RegisterEdgeControllerProxyServer(grpcServer, proxyHandler)
 
 	if s.Configuration.Debug{
 		log.Info().Msg("Enabling gRPC server reflection")
