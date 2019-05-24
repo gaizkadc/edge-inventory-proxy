@@ -31,6 +31,7 @@ spec:
         - "run"
         - "--debug"
         - "--port=5544"
+        - "--queueAddress=broker.__NPH_NAMESPACE:6650"
         securityContext:
           runAsUser: 2000
       - name: eip-sidecar
