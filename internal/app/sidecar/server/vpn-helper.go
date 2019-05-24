@@ -1,9 +1,18 @@
 package server
 
 import (
+	"context"
+	"errors"
 	"fmt"
+	"github.com/nalej/derrors"
+	"github.com/nalej/edge-inventory-proxy/internal/app/sidecar/config"
+	"github.com/nalej/grpc-network-go"
+	"github.com/nalej/grpc-utils/pkg/conversions"
 	"github.com/rs/zerolog/log"
+	"google.golang.org/grpc"
+	"net"
 	"os/exec"
+	"time"
 )
 
 const (
@@ -24,11 +33,11 @@ const (
 
 // VpnHelper structure to interface with the VPN client command to join the VPN.
 type VpnHelper struct{
-	vpnServerAddress string
+	config config.Config
 }
 
-func NewVpnHelper (address string) *VpnHelper{
-	return &VpnHelper{address}
+func NewVpnHelper (config config.Config) *VpnHelper{
+	return &VpnHelper{config}
 }
 
 // execCmd executes a given command on the command line.
@@ -56,7 +65,7 @@ func (h * VpnHelper) ConfigureLocalVPN () error {
 	vpnUserName := fmt.Sprintf("/USERNAME:%s", user)
 
 	// Account Create
-	vpnServer := fmt.Sprintf("/SERVER:%s", h.vpnServerAddress)
+	vpnServer := fmt.Sprintf("/SERVER:%s", h.config.VPNAddress)
 	err = h.execCmd(command, cmdMode, vpnClientAddress,cmdCmd, accountCreateCmd, user, vpnServer, hub, vpnUserName, nicUser)
 	if err != nil {
 		log.Warn().Str("error", err.Error()).Msg("error creating account")
@@ -94,5 +103,60 @@ func (h * VpnHelper) ConfigureLocalVPN () error {
 	// Success!
 	log.Info().Str("user", user).Msg("connected")
 
+	return nil
+}
+
+func (h * VpnHelper) getVPNNicName() string{
+	return fmt.Sprintf("vpn_%s", nicName)
+}
+
+func (h * VpnHelper) getVPNAddress() (*string, error){
+	iface, err := net.InterfaceByName(h.getVPNNicName())
+	if err != nil{
+		return nil, err
+	}
+
+	addresses, err := iface.Addrs()
+	if err != nil{
+		return nil, err
+	}
+	for _, addr := range addresses{
+		netIP, ok := addr.(*net.IPNet)
+		if ok && !netIP.IP.IsLoopback() && netIP.IP.To4() != nil{
+			ip := netIP.IP.String()
+			return &ip, nil
+		}
+	}
+	return nil, errors.New("cannot retrieve address list")
+}
+
+func (h * VpnHelper) RegisterVPNAddress() error{
+	ip, err := h.getVPNAddress()
+	if err != nil{
+		return err
+	}
+
+	conn, err := grpc.Dial(h.config.NetworkManagerAddress, grpc.WithInsecure())
+	if err != nil {
+		return derrors.AsError(err, "cannot create connection with infrastructure monitor coordinator")
+	}
+	netManagerClient := grpc_network_go.NewServiceDNSClient(conn)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second * 10)
+	defer cancel()
+	addRequest := &grpc_network_go.AddServiceDNSEntryRequest{
+		OrganizationId:       "management",
+		Fqdn:                 fmt.Sprintf("%s-vpn", h.config.ProxyName),
+		Ip:                   *ip,
+		Tags:                 []string{"EIC_PROXY"},
+	}
+	log.Debug().Interface("request", addRequest).Msg("registering entry")
+	_, err = netManagerClient.AddEntry(ctx, addRequest)
+
+	if err != nil{
+		dErr := conversions.ToDerror(err)
+		log.Error().Str("trace", dErr.DebugReport()).Msg("cannot register edge inventory proxy IP on the DNS")
+		return err
+	}
 	return nil
 }

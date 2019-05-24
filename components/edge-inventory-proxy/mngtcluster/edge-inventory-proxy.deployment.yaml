@@ -40,6 +40,7 @@ spec:
             - "run"
             - "--debug"
             - "--vpnAddress=vpn-server.__NPH_NAMESPACE:5555"
+            - "--networkManagerAddress=network-manager.__NPH_NAMESPACE:8000"
         securityContext:
           runAsUser: 0
           capabilities:
