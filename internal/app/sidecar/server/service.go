@@ -15,10 +15,25 @@ func NewService(conf config.Config) *Service {
 }
 
 func (s *Service) Run() error {
-	// connect to VPN
-	vpnErr := NewVpnHelper(s.Configuration.VpnAddress).ConfigureLocalVPN()
-	if vpnErr != nil {
-		log.Fatal().Errs("failed to connect VPN: %v", []error{vpnErr})
+
+	vErr := s.Configuration.Validate()
+	if vErr != nil {
+		log.Fatal().Str("err", vErr.DebugReport()).Msg("invalid configuration")
 	}
+
+	s.Configuration.Print()
+
+	helper := NewVpnHelper(s.Configuration)
+
+	err := helper.ConfigureLocalVPN()
+	if err != nil{
+		log.Fatal().Err(err).Msg("cannot configure VPN")
+	}
+
+	err = helper.RegisterVPNAddress()
+	if err != nil{
+		log.Fatal().Err(err).Msg("cannot register Proxy DNS")
+	}
+
 	return nil
 }

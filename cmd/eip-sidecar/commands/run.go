@@ -28,5 +28,8 @@ var runCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(runCmd)
-	runCmd.Flags().StringVar(&cfg.VpnAddress, "vpnAddress", "vpn-server.nalej:5555", " VPN Server internal address with port")
+	runCmd.Flags().StringVar(&cfg.VPNAddress, "vpnAddress", "localhost:5555", " VPN Server internal address (host:port)")
+	runCmd.Flags().StringVar(&cfg.NetworkManagerAddress, "networkManagerAddress", "localhost:8000",
+		"Network Manager address (host:port)")
+	runCmd.Flags().StringVar(&cfg.ProxyName, "proxyName", "proxy0", "Name of the proxy for the DNS registration without .vpn.service.nalej")
 }
