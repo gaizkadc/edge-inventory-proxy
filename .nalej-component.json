@@ -1,0 +1,11 @@
+{
+    "language": "golang",
+    "application_list": [
+        "edge-inventory-proxy eip-sidecar"
+    ],
+    "tools": [
+        "azure",
+        "k8s",
+        "docker"
+    ]
+}
