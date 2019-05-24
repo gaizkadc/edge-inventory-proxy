@@ -6,10 +6,13 @@ package server
 
 import (
 	"fmt"
+	"github.com/nalej/derrors"
 	"github.com/nalej/edge-inventory-proxy/internal/app/eicproxy/config"
 	"github.com/nalej/edge-inventory-proxy/internal/app/eicproxy/server/ecinventory"
 	"github.com/nalej/edge-inventory-proxy/internal/app/eicproxy/server/ecproxy"
 	"github.com/nalej/grpc-edge-inventory-proxy-go"
+	"github.com/nalej/nalej-bus/pkg/queue/inventory/events"
+	"github.com/nalej/nalej-bus/pkg/bus/pulsar-comcast"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -27,6 +30,21 @@ func NewService(conf config.Config) *Service {
 	}
 }
 
+type BusClients struct {
+	inventoryEventsProducer * events.InventoryEventsProducer
+}
+
+func (s*Service) GetBusClients() (*BusClients, derrors.Error) {
+	queueClient := pulsar_comcast.NewClient(s.Configuration.QueueAddress)
+	invEventProducer , err := events.NewInventoryEventsProducer(queueClient, "eicproxy-invevents")
+	if err != nil {
+		return nil, err
+	}
+	return &BusClients{
+		invEventProducer,
+	}, nil
+}
+
 // Run the service, launch the REST service handler.
 func (s *Service) Run() error {
 	cErr := s.Configuration.Validate()
@@ -41,8 +59,13 @@ func (s *Service) Run() error {
 		log.Fatal().Errs("failed to listen: %v", []error{err})
 	}
 
+	busClients, bErr := s.GetBusClients()
+	if err != nil{
+		log.Fatal().Str("err", bErr.DebugReport()).Msg("Cannot create bus clients")
+	}
+
 	// Create handlers
-	invManager := ecinventory.NewManager(s.Configuration)
+	invManager := ecinventory.NewManager(s.Configuration, busClients.inventoryEventsProducer)
 	invHandler := ecinventory.NewHandler(invManager)
 
 	proxyManager := ecproxy.NewManager(s.Configuration)

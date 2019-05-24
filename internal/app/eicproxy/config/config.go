@@ -15,6 +15,8 @@ type Config struct {
 	Debug bool
 	// EIP port
 	EipPort int
+	// QueueAddress with the bus address
+	QueueAddress string
 }
 
 func (conf *Config) Validate() derrors.Error {
@@ -23,10 +25,15 @@ func (conf *Config) Validate() derrors.Error {
 		return derrors.NewInvalidArgumentError("port must be valid")
 	}
 
+	if conf.QueueAddress == ""{
+		return derrors.NewInvalidArgumentError("queueAddress must not be empty")
+	}
+
 	return nil
 }
 
 func (conf *Config) Print() {
 	log.Info().Str("app", version.AppVersion).Str("commit", version.Commit).Msg("Version")
 	log.Info().Int("port", conf.EipPort).Msg("EIP port")
+	log.Info().Str("URL", conf.QueueAddress).Msg("Queue")
 }
