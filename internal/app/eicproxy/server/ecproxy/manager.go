@@ -39,7 +39,7 @@ func (m*Manager) getIP(dnsName string) (*string, error){
 		PreferGo: true,
 		Dial: func(ctx context.Context, network, address string) (net.Conn, error) {
 			d := net.Dialer{}
-			return d.DialContext(ctx, "udp", net.JoinHostPort("51.144.230.81", "53"))
+			return d.DialContext(ctx, "udp", net.JoinHostPort(m.config.DNSServer, "53"))
 		},
 	}
 
@@ -55,7 +55,7 @@ func (m*Manager) getIP(dnsName string) (*string, error){
 	return nil, errors.New("empty result")
 }
 
-func (m*Manager) getAgentClient(edgeControllerID string) (grpc_edge_controller_go.AgentClient, derrors.Error){
+func (m*Manager) getEICClient(edgeControllerID string) (grpc_edge_controller_go.EICClient, derrors.Error){
 	dnsName := fmt.Sprintf("%s-vpn.service.nalej", edgeControllerID)
 	ecIP, err := m.getIP(dnsName)
 	if err != nil{
@@ -67,12 +67,12 @@ func (m*Manager) getAgentClient(edgeControllerID string) (grpc_edge_controller_g
 	if err != nil {
 		return nil, derrors.AsError(err, "cannot create connection with edge controller")
 	}
-	client := grpc_edge_controller_go.NewAgentClient(conn)
+	client := grpc_edge_controller_go.NewEICClient(conn)
 	return client, nil
 }
 
 func (m*Manager) CreateAgentJoinToken(edgeControllerID *grpc_inventory_go.EdgeControllerId) (*grpc_inventory_manager_go.AgentJoinToken, error) {
-	edgeClient, aErr := m.getAgentClient(edgeControllerID.EdgeControllerId)
+	edgeClient, aErr := m.getEICClient(edgeControllerID.EdgeControllerId)
 	if aErr != nil{
 		return nil, conversions.ToGRPCError(aErr)
 	}
