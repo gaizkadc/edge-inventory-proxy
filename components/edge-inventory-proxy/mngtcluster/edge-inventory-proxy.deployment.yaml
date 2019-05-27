@@ -32,6 +32,13 @@ spec:
         - "--debug"
         - "--port=5544"
         - "--queueAddress=broker.__NPH_NAMESPACE:6650"
+        - "--dnsServer=$(DNS_SERVER)"
+        env:
+        - name: DNS_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: management-config
+              key: dns_host
         securityContext:
           runAsUser: 2000
       - name: eip-sidecar

@@ -18,6 +18,10 @@ type Handler struct {
 	manager Manager
 }
 
+func (h *Handler) AgentJoin(context.Context, *grpc_inventory_manager_go.AgentJoinRequest) (*grpc_inventory_manager_go.AgentJoinResponse, error) {
+	panic("implement me")
+}
+
 func NewHandler(manager Manager) *Handler {
 	return &Handler{
 		manager,

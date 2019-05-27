@@ -17,6 +17,8 @@ type Config struct {
 	EipPort int
 	// QueueAddress with the bus address
 	QueueAddress string
+	// DNSServer used to resolve EC IP address from domain names.
+	DNSServer string
 }
 
 func (conf *Config) Validate() derrors.Error {
@@ -28,6 +30,9 @@ func (conf *Config) Validate() derrors.Error {
 	if conf.QueueAddress == ""{
 		return derrors.NewInvalidArgumentError("queueAddress must not be empty")
 	}
+	if conf.DNSServer == ""{
+		return derrors.NewInvalidArgumentError("dnsServer must not be empty")
+	}
 
 	return nil
 }
@@ -35,5 +40,6 @@ func (conf *Config) Validate() derrors.Error {
 func (conf *Config) Print() {
 	log.Info().Str("app", version.AppVersion).Str("commit", version.Commit).Msg("Version")
 	log.Info().Int("port", conf.EipPort).Msg("EIP port")
+	log.Info().Str("URL", conf.DNSServer).Msg("DNS Server")
 	log.Info().Str("URL", conf.QueueAddress).Msg("Queue")
 }
