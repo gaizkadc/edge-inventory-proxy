@@ -26,8 +26,6 @@ const (
 	accountCreateCmd = "AccountCreate"
 	accountPasswordSetCmd = "AccountPasswordSet"
 	vpnClientAddress = "localhost"
-	user = "admin"
-	password = "admin"
 	dhcclientCmd = "/sbin/dhclient"
 )
 
@@ -55,31 +53,31 @@ func (h * VpnHelper) execCmd(cmdName string, args ...string) error {
 // ConfigureLocalVPN triggers the steps required to configure the VPN connection.
 func (h * VpnHelper) ConfigureLocalVPN () error {
 
-	log.Info().Str("user", user).Msg("Configuring Local VPN")
+	log.Info().Str("user", h.config.Username).Msg("Configuring Local VPN")
 
 	// NicCreate
 	err := h.execCmd(command, cmdMode, vpnClientAddress, cmdCmd, nicCreateCmd, nicName)
 	if err != nil {
 		log.Info().Str("error", err.Error()).Msg("error creating nicName")
 	}
-	vpnUserName := fmt.Sprintf("/USERNAME:%s", user)
+	vpnUserName := fmt.Sprintf("/USERNAME:%s", h.config.Username)
 
 	// Account Create
 	vpnServer := fmt.Sprintf("/SERVER:%s", h.config.VPNAddress)
-	err = h.execCmd(command, cmdMode, vpnClientAddress,cmdCmd, accountCreateCmd, user, vpnServer, hub, vpnUserName, nicUser)
+	err = h.execCmd(command, cmdMode, vpnClientAddress,cmdCmd, accountCreateCmd, h.config.Username, vpnServer, hub, vpnUserName, nicUser)
 	if err != nil {
 		log.Warn().Str("error", err.Error()).Msg("error creating account")
 	}
 
 	// Account PasswordSet
-	pass := fmt.Sprintf("/PASSWORD:%s", password)
-	err = h.execCmd(command, cmdMode, vpnClientAddress,cmdCmd, accountPasswordSetCmd, password, pass, "/TYPE:standard")
+	pass := fmt.Sprintf("/PASSWORD:%s", h.config.Password)
+	err = h.execCmd(command, cmdMode, vpnClientAddress,cmdCmd, accountPasswordSetCmd, h.config.Username, pass, "/TYPE:standard")
 	if err != nil {
 		log.Warn().Str("error", err.Error()).Msg("error creating password")
 	}
 
 	// Connect
-	err = h.execCmd(command, cmdMode, vpnClientAddress,cmdCmd, "accountConnect", user)
+	err = h.execCmd(command, cmdMode, vpnClientAddress,cmdCmd, "accountConnect", h.config.Username)
 	if err != nil {
 		log.Warn().Str("error", err.Error()).Msg("error connecting account")
 		return err
@@ -101,7 +99,7 @@ func (h * VpnHelper) ConfigureLocalVPN () error {
 	}
 
 	// Success!
-	log.Info().Str("user", user).Msg("connected")
+	log.Info().Str("user", h.config.Username).Msg("connected")
 
 	return nil
 }

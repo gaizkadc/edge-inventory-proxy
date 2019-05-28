@@ -32,4 +32,6 @@ func init() {
 	runCmd.Flags().StringVar(&cfg.NetworkManagerAddress, "networkManagerAddress", "localhost:8000",
 		"Network Manager address (host:port)")
 	runCmd.Flags().StringVar(&cfg.ProxyName, "proxyName", "proxy0", "Name of the proxy for the DNS registration without .vpn.service.nalej")
+	runCmd.Flags().StringVar(&cfg.Username, "username", "admin", "Username for the VPN")
+	runCmd.Flags().StringVar(&cfg.Password, "password", "ecb75e08-27ad-412f-acd0-436f6f7b7c29", "Password for the VPN user")
 }
