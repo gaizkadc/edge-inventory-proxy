@@ -11,8 +11,9 @@ import (
 	"github.com/nalej/edge-inventory-proxy/internal/app/eicproxy/server/ecinventory"
 	"github.com/nalej/edge-inventory-proxy/internal/app/eicproxy/server/ecproxy"
 	"github.com/nalej/grpc-edge-inventory-proxy-go"
-	"github.com/nalej/nalej-bus/pkg/queue/inventory/events"
+	"github.com/nalej/grpc-inventory-manager-go"
 	"github.com/nalej/nalej-bus/pkg/bus/pulsar-comcast"
+	"github.com/nalej/nalej-bus/pkg/queue/inventory/events"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -45,11 +46,26 @@ func (s*Service) GetBusClients() (*BusClients, derrors.Error) {
 	}, nil
 }
 
+type Clients struct {
+	agentClient grpc_inventory_manager_go.AgentClient
+}
+func (s *Service) GetClients() (*Clients, derrors.Error) {
+
+	invManagerConn, err := grpc.Dial(s.Configuration.InventoryManagerAddress, grpc.WithInsecure())
+	if err != nil {
+		return nil, derrors.AsError(err, "cannot create connection with inventory manager")
+	}
+
+	agentClient := grpc_inventory_manager_go.NewAgentClient(invManagerConn)
+
+	return &Clients{agentClient:agentClient}, nil
+}
+
 // Run the service, launch the REST service handler.
 func (s *Service) Run() error {
-	cErr := s.Configuration.Validate()
-	if cErr != nil {
-		log.Fatal().Str("err", cErr.DebugReport()).Msg("invalid configuration")
+	vErr := s.Configuration.Validate()
+	if vErr != nil {
+		log.Fatal().Str("err", vErr.DebugReport()).Msg("invalid configuration")
 	}
 	s.Configuration.Print()
 
@@ -64,8 +80,15 @@ func (s *Service) Run() error {
 		log.Fatal().Str("err", bErr.DebugReport()).Msg("Cannot create bus clients")
 	}
 
+	clients, cErr := s.GetClients()
+	if cErr != nil {
+		log.Fatal().Str("err", cErr.DebugReport()).Msg("cannot generate clients")
+		return cErr
+	}
+
+
 	// Create handlers
-	invManager := ecinventory.NewManager(s.Configuration, busClients.inventoryEventsProducer)
+	invManager := ecinventory.NewManager(s.Configuration, busClients.inventoryEventsProducer, clients.agentClient)
 	invHandler := ecinventory.NewHandler(invManager)
 
 	proxyManager := ecproxy.NewManager(s.Configuration)

@@ -18,14 +18,22 @@ type Handler struct {
 	manager Manager
 }
 
-func (h *Handler) AgentJoin(context.Context, *grpc_inventory_manager_go.AgentJoinRequest) (*grpc_inventory_manager_go.AgentJoinResponse, error) {
-	panic("implement me")
-}
-
 func NewHandler(manager Manager) *Handler {
 	return &Handler{
 		manager,
 	}
+}
+
+func (h *Handler) AgentJoin(_ context.Context, request *grpc_inventory_manager_go.AgentJoinRequest) (*grpc_inventory_manager_go.AgentJoinResponse, error) {
+	vErr := entities.ValidAgentJoinRequest(request)
+	if vErr != nil {
+		return nil, conversions.ToGRPCError(vErr)
+	}
+
+	log.Debug().Str("organization_id", request.OrganizationId).Str("edge_controller_id", request.EdgeControllerId).
+		Str("agent_id", request.AgentId).Msg("Agent join")
+
+	return h.manager.AgentJoin(request)
 }
 
 func (h *Handler) EICStart(ctx context.Context, request *grpc_inventory_manager_go.EICStartInfo) (*grpc_common_go.Success, error) {
