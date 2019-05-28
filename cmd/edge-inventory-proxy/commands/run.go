@@ -31,4 +31,5 @@ func init() {
 	runCmd.Flags().IntVar(&cfg.EipPort, "port", 5544, "Port to receive management communications")
 	runCmd.Flags().StringVar(&cfg.QueueAddress, "queueAddress", "localhost:6650", "Queue address (host:port)")
 	runCmd.Flags().StringVar(&cfg.DNSServer, "dnsServer", "", "DNS server to resolve EC hostnames")
+	runCmd.Flags().StringVar(&cfg.InventoryManagerAddress, "inventoryManagerAddress", "localhost:5510", "Inventory Manager address (host:port)")
 }
