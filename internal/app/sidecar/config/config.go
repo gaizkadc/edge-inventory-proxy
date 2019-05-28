@@ -4,6 +4,7 @@ import (
 	"github.com/nalej/derrors"
 	"github.com/nalej/edge-inventory-proxy/version"
 	"github.com/rs/zerolog/log"
+	"strings"
 )
 
 type Config struct {
@@ -18,6 +19,11 @@ type Config struct {
 
 	// NetworkManagerAddress with the address of the network manager
 	NetworkManagerAddress string
+
+	// Username to connect to the VPN
+	Username string
+	// Password to connect to the VPN
+	Password string
 }
 
 func (conf *Config) Validate() derrors.Error {
@@ -32,6 +38,10 @@ func (conf *Config) Validate() derrors.Error {
 		return derrors.NewInvalidArgumentError("networkManagerAddress cannot be empty")
 	}
 
+	if conf.Username == "" || conf.Password == ""{
+		return derrors.NewInvalidArgumentError("username and password must be specified")
+	}
+
 	return nil
 }
 
@@ -40,4 +50,5 @@ func (conf *Config) Print() {
 	log.Info().Str("URL", conf.VPNAddress).Msg("VPN Server")
 	log.Info().Str("URL", conf.NetworkManagerAddress).Msg("Network Manager")
 	log.Info().Str("proxyName", conf.ProxyName).Msg("Proxy identity")
+	log.Info().Str("username", conf.Username).Str("password", strings.Repeat("*", len(conf.Password))).Msg("VPN credentials")
 }
