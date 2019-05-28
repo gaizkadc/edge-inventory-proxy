@@ -33,6 +33,7 @@ spec:
         - "--port=5544"
         - "--queueAddress=broker.__NPH_NAMESPACE:6650"
         - "--dnsServer=$(DNS_SERVER)"
+        - "--inventoryManagerAddress=inventory-manager.__NPH_NAMESPACE:5510"
         env:
         - name: DNS_SERVER
           valueFrom:
