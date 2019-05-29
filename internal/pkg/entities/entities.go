@@ -56,4 +56,5 @@ func ValidAgentsAlive (request *grpc_inventory_manager_go.AgentsAlive) derrors.E
 	if request.Agents == nil || len(request.Agents) <= 0 {
 		return derrors.NewInvalidArgumentError("agents cannot be empty")
 	}
+	return nil
 }
