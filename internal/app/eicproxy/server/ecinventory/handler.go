@@ -24,6 +24,9 @@ func NewHandler(manager Manager) *Handler {
 	}
 }
 
+// ------------
+// Agent
+// ------------
 func (h *Handler) AgentJoin(_ context.Context, request *grpc_inventory_manager_go.AgentJoinRequest) (*grpc_inventory_manager_go.AgentJoinResponse, error) {
 	vErr := entities.ValidAgentJoinRequest(request)
 	if vErr != nil {
@@ -36,6 +39,26 @@ func (h *Handler) AgentJoin(_ context.Context, request *grpc_inventory_manager_g
 	return h.manager.AgentJoin(request)
 }
 
+func (h *Handler)  LogAgentAlive(_ context.Context, request *grpc_inventory_manager_go.AgentsAlive) (*grpc_common_go.Success, error){
+	vErr := entities.ValidAgentsAlive(request)
+	if vErr != nil {
+		return nil, conversions.ToGRPCError(vErr)
+	}
+
+	log.Debug().Str("organization_id", request.OrganizationId).Str("edge_controller_id", request.EdgeControllerId).
+		Int("agents", len(request.Agents)).Msg("Agents Alive")
+
+	err := h.manager.LogAgentAlive(request)
+	if err != nil{
+		return nil, conversions.ToGRPCError(err)
+	}
+	return &grpc_common_go.Success{}, nil
+}
+
+
+// ----------------
+// Edge Controller
+// ----------------
 func (h *Handler) EICStart(ctx context.Context, request *grpc_inventory_manager_go.EICStartInfo) (*grpc_common_go.Success, error) {
 	vErr := entities.ValidEICStartInfo(request)
 	if vErr != nil{

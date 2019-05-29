@@ -8,6 +8,7 @@ import (
 	"context"
 	"github.com/nalej/derrors"
 	"github.com/nalej/edge-inventory-proxy/internal/app/eicproxy/config"
+	"github.com/nalej/grpc-common-go"
 	"github.com/nalej/grpc-inventory-go"
 	"github.com/nalej/grpc-inventory-manager-go"
 	"github.com/nalej/nalej-bus/pkg/queue/inventory/events"
@@ -31,6 +32,9 @@ func NewManager(config config.Config, producer *events.InventoryEventsProducer, 
 	}
 }
 
+// ----------------
+// Edge Controller
+// ----------------
 func (m * Manager) EICStart(request *grpc_inventory_manager_go.EICStartInfo) derrors.Error {
 	ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 	defer cancel()
@@ -43,9 +47,19 @@ func (m *Manager) EICAlive(id *grpc_inventory_go.EdgeControllerId) derrors.Error
 	return m.inventoryProducer.Send(ctx, id)
 }
 
+// ------------
+// Agent
+// ------------
 func (m *Manager) AgentJoin(request *grpc_inventory_manager_go.AgentJoinRequest) (*grpc_inventory_manager_go.AgentJoinResponse, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 	defer cancel()
 
 	return  m.agentClient.AgentJoin(ctx, request)
+}
+
+func (m *Manager)  LogAgentAlive( request *grpc_inventory_manager_go.AgentsAlive) derrors.Error{
+	ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+	defer cancel()
+	return m.inventoryProducer.Send(ctx, request)
+
 }
