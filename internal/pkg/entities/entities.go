@@ -6,8 +6,8 @@ package entities
 
 import (
 	"github.com/nalej/derrors"
-	"github.com/nalej/grpc-inventory-manager-go"
 	"github.com/nalej/grpc-inventory-go"
+	"github.com/nalej/grpc-inventory-manager-go"
 )
 
 func ValidEdgeControllerId(id * grpc_inventory_go.EdgeControllerId) derrors.Error{

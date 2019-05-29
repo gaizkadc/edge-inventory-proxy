@@ -8,7 +8,6 @@ import (
 	"context"
 	"github.com/nalej/derrors"
 	"github.com/nalej/edge-inventory-proxy/internal/app/eicproxy/config"
-	"github.com/nalej/grpc-common-go"
 	"github.com/nalej/grpc-inventory-go"
 	"github.com/nalej/grpc-inventory-manager-go"
 	"github.com/nalej/nalej-bus/pkg/queue/inventory/events"
