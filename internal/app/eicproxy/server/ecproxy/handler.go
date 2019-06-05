@@ -32,7 +32,11 @@ func (h *Handler) CreateAgentJoinToken(_ context.Context, edgeControllerID *grpc
 }
 
 func (h*Handler) TriggerAgentOperation(_ context.Context, request *grpc_inventory_manager_go.AgentOpRequest) (*grpc_inventory_manager_go.AgentOpResponse, error) {
-	panic("implement me")
+	vErr := entities.ValidAgentOpRequest(request)
+	if vErr != nil {
+		return nil, conversions.ToGRPCError(vErr)
+	}
+	return h.manager.TriggerAgentOperation(request)
 }
 
 func (h*Handler) Configure(_ context.Context, request *grpc_inventory_manager_go.ConfigureEICRequest) (*grpc_common_go.Success, error) {
