@@ -87,7 +87,13 @@ func (m*Manager) CreateAgentJoinToken(edgeControllerID *grpc_inventory_go.EdgeCo
 }
 
 func (m*Manager) TriggerAgentOperation(request *grpc_inventory_manager_go.AgentOpRequest) (*grpc_inventory_manager_go.AgentOpResponse, error) {
-	panic("implement me")
+	edgeClient, aErr := m.getEICClient(request.EdgeControllerId)
+	if aErr != nil{
+		return nil, conversions.ToGRPCError(aErr)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
+	defer cancel()
+	return  edgeClient.TriggerAgentOperation(ctx, request)
 }
 
 func (m*Manager) Configure(request *grpc_inventory_manager_go.ConfigureEICRequest) (*grpc_common_go.Success, error) {
