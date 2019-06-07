@@ -55,6 +55,26 @@ func (h *Handler)  LogAgentAlive(_ context.Context, request *grpc_inventory_mana
 	return &grpc_common_go.Success{}, nil
 }
 
+// CallbackAgentOperation is called by the EIC upon execution of the operation by the agent.
+func (h *Handler) CallbackAgentOperation(_ context.Context, opResponse *grpc_inventory_manager_go.AgentOpResponse) (*grpc_common_go.Success, error) {
+	vErr := entities.ValidAgentOpResponse(opResponse)
+	if  vErr != nil {
+		return nil, conversions.ToGRPCError(vErr)
+	}
+
+	log.Debug().Str("organization_id", opResponse.OrganizationId).Str("edge_controller_id", opResponse.EdgeControllerId).
+		Str("asset_id", opResponse.AssetId).Str("operation_id", opResponse.OperationId).Msg("CallbackAgentOperation")
+
+
+	err := h.manager.CallbackAgentOperation(opResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	return &grpc_common_go.Success{}, nil
+
+}
+
 
 // ----------------
 // Edge Controller
@@ -77,7 +97,6 @@ func (h *Handler) EICAlive(ctx context.Context, id *grpc_inventory_go.EdgeContro
 	if vErr != nil{
 		return nil, conversions.ToGRPCError(vErr)
 	}
-	log.Debug().Str("organization_id", id.OrganizationId).Str("edge_controller_id", id.EdgeControllerId).Msg("EC is alive")
 	err := h.manager.EICAlive(id)
 	if err != nil{
 		return nil, conversions.ToGRPCError(err)
