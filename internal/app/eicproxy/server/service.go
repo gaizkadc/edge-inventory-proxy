@@ -14,6 +14,7 @@ import (
 	"github.com/nalej/grpc-inventory-manager-go"
 	"github.com/nalej/nalej-bus/pkg/bus/pulsar-comcast"
 	"github.com/nalej/nalej-bus/pkg/queue/inventory/events"
+	"github.com/nalej/nalej-bus/pkg/queue/inventory/ops"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -33,6 +34,7 @@ func NewService(conf config.Config) *Service {
 
 type BusClients struct {
 	inventoryEventsProducer * events.InventoryEventsProducer
+	inventoryOpsProducer * ops.InventoryOpsProducer
 }
 
 func (s*Service) GetBusClients() (*BusClients, derrors.Error) {
@@ -41,8 +43,15 @@ func (s*Service) GetBusClients() (*BusClients, derrors.Error) {
 	if err != nil {
 		return nil, err
 	}
+
+	invOpProducer, err := ops.NewInventoryOpsProducer(queueClient, "eicproxy-invops")
+	if err != nil {
+		return nil, err
+	}
+
 	return &BusClients{
-		invEventProducer,
+		inventoryEventsProducer:invEventProducer,
+		inventoryOpsProducer:invOpProducer,
 	}, nil
 }
 
@@ -88,7 +97,7 @@ func (s *Service) Run() error {
 
 
 	// Create handlers
-	invManager := ecinventory.NewManager(s.Configuration, busClients.inventoryEventsProducer, clients.agentClient)
+	invManager := ecinventory.NewManager(s.Configuration, busClients.inventoryEventsProducer, busClients.inventoryOpsProducer, clients.agentClient)
 	invHandler := ecinventory.NewHandler(invManager)
 
 	proxyManager := ecproxy.NewManager(s.Configuration)

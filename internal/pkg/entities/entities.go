@@ -78,3 +78,19 @@ func ValidAgentOpRequest(request *grpc_inventory_manager_go.AgentOpRequest) derr
 	}
 	return nil
 }
+
+func ValidAgentOpResponse (request *grpc_inventory_manager_go.AgentOpResponse) derrors.Error {
+	if request.OrganizationId == "" {
+		return derrors.NewInvalidArgumentError("organization_id cannot be empty")
+	}
+	if request.EdgeControllerId == "" {
+		return derrors.NewInvalidArgumentError("edge_controller_id cannot be empty")
+	}
+	if request.AssetId == "" {
+		return derrors.NewInvalidArgumentError("asset_id cannot be empty")
+	}
+	if request.OperationId == "" {
+		return derrors.NewInvalidArgumentError("operation_id cannot be empty")
+	}
+	return nil
+}

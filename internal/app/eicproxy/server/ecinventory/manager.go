@@ -11,6 +11,7 @@ import (
 	"github.com/nalej/grpc-inventory-go"
 	"github.com/nalej/grpc-inventory-manager-go"
 	"github.com/nalej/nalej-bus/pkg/queue/inventory/events"
+	"github.com/nalej/nalej-bus/pkg/queue/inventory/ops"
 	"time"
 )
 
@@ -20,13 +21,15 @@ const defaultTimeout = time.Second * 10
 type Manager struct {
 	config config.Config
 	inventoryProducer *events.InventoryEventsProducer
+	inventoryOpsProducer *ops.InventoryOpsProducer
 	agentClient grpc_inventory_manager_go.AgentClient
 }
 
-func NewManager(config config.Config, producer *events.InventoryEventsProducer, client grpc_inventory_manager_go.AgentClient) Manager{
+func NewManager(config config.Config, producer *events.InventoryEventsProducer, opProducer *ops.InventoryOpsProducer, client grpc_inventory_manager_go.AgentClient) Manager{
 	return Manager{
 		config: config,
 		inventoryProducer: producer,
+		inventoryOpsProducer:opProducer,
 		agentClient: client,
 	}
 }
@@ -61,4 +64,10 @@ func (m *Manager)  LogAgentAlive( request *grpc_inventory_manager_go.AgentsAlive
 	defer cancel()
 	return m.inventoryProducer.Send(ctx, request)
 
+}
+
+func (m *Manager) CallbackAgentOperation(opResponse *grpc_inventory_manager_go.AgentOpResponse)  error {
+	ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+	defer cancel()
+	return m.inventoryOpsProducer.Send(ctx, opResponse)
 }
