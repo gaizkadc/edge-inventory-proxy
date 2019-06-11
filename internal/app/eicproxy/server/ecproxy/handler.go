@@ -51,3 +51,7 @@ func (h*Handler) QueryMetrics(_ context.Context, request *grpc_inventory_manager
 	panic("implement me")
 }
 
+// UnlinkEC operation to remove/uninstall an EIC.
+func (h *Handler) UnlinkEC(_ context.Context, edgeControllerID *grpc_inventory_go.EdgeControllerId) (*grpc_common_go.Success, error){
+	return nil, nil
+}
