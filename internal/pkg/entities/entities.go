@@ -94,3 +94,30 @@ func ValidAgentOpResponse (request *grpc_inventory_manager_go.AgentOpResponse) d
 	}
 	return nil
 }
+
+func ValidAssetSelector(selector *grpc_inventory_manager_go.AssetSelector) derrors.Error {
+	// For the proxy to properly connect we need an Edge Controller ID.
+	// Other validation is done by the Edge Controller.
+	if selector == nil {
+		return derrors.NewInvalidArgumentError("empty asset selector")
+	}
+	if selector.GetOrganizationId() == "" {
+		return derrors.NewInvalidArgumentError("organization_id cannot be empty")
+	}
+	if selector.GetEdgeControllerId() == "" {
+		return derrors.NewInvalidArgumentError("edge_controller_id cannot be empty")
+	}
+	return nil
+}
+
+func ValidQueryMetricsRequest(request *grpc_inventory_manager_go.QueryMetricsRequest) derrors.Error {
+	// We check the asset selector so we know we have an edge controller ID.
+	// The rest is verified by the Edge Controller so we don't have to
+	// adapt the proxy if functionality changes.
+	derr := ValidAssetSelector(request.GetAssets())
+	if derr != nil {
+		return derr
+	}
+
+	return nil
+}
