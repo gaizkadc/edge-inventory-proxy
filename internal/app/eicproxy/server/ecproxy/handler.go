@@ -14,6 +14,7 @@ import (
 	"github.com/nalej/grpc-inventory-go"
 	"github.com/nalej/grpc-inventory-manager-go"
 	"github.com/nalej/grpc-utils/pkg/conversions"
+	"github.com/rs/zerolog/log"
 )
 
 type Handler struct {
@@ -62,3 +63,13 @@ func (h*Handler) QueryMetrics(_ context.Context, request *grpc_inventory_manager
 	return h.manager.QueryMetrics(request)
 }
 
+// UnlinkEC operation to remove/uninstall an EIC.
+func (h *Handler) UnlinkEC(_ context.Context, edgeControllerID *grpc_inventory_go.EdgeControllerId) (*grpc_common_go.Success, error){
+	log.Debug().Msg("UnlinkEIC received")
+	vErr := entities.ValidEdgeControllerId(edgeControllerID)
+	if vErr != nil {
+		return nil, conversions.ToGRPCError(vErr)
+	}
+
+	return h.manager.UnlinkEC(edgeControllerID)
+}
