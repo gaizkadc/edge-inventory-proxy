@@ -107,3 +107,15 @@ func (m*Manager) ListMetrics(selector *grpc_inventory_manager_go.AssetSelector) 
 func (m*Manager) QueryMetrics(request *grpc_inventory_manager_go.QueryMetricsRequest) (*grpc_inventory_manager_go.QueryMetricsResult, error) {
 	panic("implement me")
 }
+
+func (m *Manager) UnlinkEC(edge *grpc_inventory_go.EdgeControllerId) (*grpc_common_go.Success, error){
+	log.Debug().Msg("UnlinkEIC received")
+
+	edgeClient, aErr := m.getEICClient(edge.EdgeControllerId)
+	if aErr != nil{
+		return nil, conversions.ToGRPCError(aErr)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
+	defer cancel()
+	return  edgeClient.Unlink(ctx, &grpc_common_go.Empty{})
+}
