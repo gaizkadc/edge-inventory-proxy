@@ -6,6 +6,9 @@ package ecproxy
 
 import (
 	"context"
+
+	"github.com/nalej/derrors"
+
 	"github.com/nalej/edge-inventory-proxy/internal/pkg/entities"
 	"github.com/nalej/grpc-common-go"
 	"github.com/nalej/grpc-inventory-go"
@@ -41,15 +44,23 @@ func (h*Handler) TriggerAgentOperation(_ context.Context, request *grpc_inventor
 }
 
 func (h*Handler) Configure(_ context.Context, request *grpc_inventory_manager_go.ConfigureEICRequest) (*grpc_common_go.Success, error) {
-	panic("implement me")
+	return nil, conversions.ToGRPCError(derrors.NewUnimplementedError("Configure call not implemented"))
 }
 
 func (h*Handler) ListMetrics(_ context.Context, selector *grpc_inventory_manager_go.AssetSelector) (*grpc_inventory_manager_go.MetricsList, error) {
-	panic("implement me")
+	derr := entities.ValidAssetSelector(selector)
+	if derr != nil {
+		return nil, conversions.ToGRPCError(derr)
+	}
+	return h.manager.ListMetrics(selector)
 }
 
 func (h*Handler) QueryMetrics(_ context.Context, request *grpc_inventory_manager_go.QueryMetricsRequest) (*grpc_inventory_manager_go.QueryMetricsResult, error) {
-	panic("implement me")
+	derr := entities.ValidQueryMetricsRequest(request)
+	if derr != nil {
+		return nil, conversions.ToGRPCError(derr)
+	}
+	return h.manager.QueryMetrics(request)
 }
 
 // UnlinkEC operation to remove/uninstall an EIC.

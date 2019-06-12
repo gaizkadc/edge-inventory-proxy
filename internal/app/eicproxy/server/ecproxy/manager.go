@@ -97,15 +97,27 @@ func (m*Manager) TriggerAgentOperation(request *grpc_inventory_manager_go.AgentO
 }
 
 func (m*Manager) Configure(request *grpc_inventory_manager_go.ConfigureEICRequest) (*grpc_common_go.Success, error) {
-	panic("implement me")
+	return nil, conversions.ToGRPCError(derrors.NewUnimplementedError("configure call not implemented"))
 }
 
 func (m*Manager) ListMetrics(selector *grpc_inventory_manager_go.AssetSelector) (*grpc_inventory_manager_go.MetricsList, error) {
-	panic("implement me")
+	edgeClient, aErr := m.getEICClient(selector.GetEdgeControllerId())
+	if aErr != nil{
+		return nil, conversions.ToGRPCError(aErr)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
+	defer cancel()
+	return edgeClient.ListMetrics(ctx, selector)
 }
 
 func (m*Manager) QueryMetrics(request *grpc_inventory_manager_go.QueryMetricsRequest) (*grpc_inventory_manager_go.QueryMetricsResult, error) {
-	panic("implement me")
+	edgeClient, aErr := m.getEICClient(request.GetAssets().GetEdgeControllerId())
+	if aErr != nil{
+		return nil, conversions.ToGRPCError(aErr)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
+	defer cancel()
+	return edgeClient.QueryMetrics(ctx, request)
 }
 
 func (m *Manager) UnlinkEC(edge *grpc_inventory_go.EdgeControllerId) (*grpc_common_go.Success, error){
