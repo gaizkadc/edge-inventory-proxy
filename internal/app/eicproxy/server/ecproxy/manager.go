@@ -109,6 +109,7 @@ func (m*Manager) QueryMetrics(request *grpc_inventory_manager_go.QueryMetricsReq
 }
 
 func (m *Manager) UnlinkEC(edge *grpc_inventory_go.EdgeControllerId) (*grpc_common_go.Success, error){
+	log.Debug().Msg("UnlinkEIC received")
 
 	edgeClient, aErr := m.getEICClient(edge.EdgeControllerId)
 	if aErr != nil{
