@@ -6,9 +6,7 @@ package ecproxy
 
 import (
 	"context"
-
 	"github.com/nalej/derrors"
-
 	"github.com/nalej/edge-inventory-proxy/internal/pkg/entities"
 	"github.com/nalej/grpc-common-go"
 	"github.com/nalej/grpc-inventory-go"
@@ -72,4 +70,15 @@ func (h *Handler) UnlinkEC(_ context.Context, edgeControllerID *grpc_inventory_g
 	}
 
 	return h.manager.UnlinkEC(edgeControllerID)
+}
+
+func (h *Handler) UninstallAgent(_ context.Context, assetID *grpc_inventory_manager_go.FullAssetId) (*grpc_common_go.Success, error) {
+	log.Debug().Str("edge_controller_id", assetID.EdgeControllerId).Str("asset_id", assetID.AssetId).Msg("uninstall msg received")
+
+	vErr := entities.ValidFullAssetID(assetID)
+	if vErr != nil {
+		return nil, conversions.ToGRPCError(vErr)
+	}
+	return h.manager.UninstallAgent(assetID)
+
 }

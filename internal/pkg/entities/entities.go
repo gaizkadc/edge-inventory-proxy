@@ -121,3 +121,16 @@ func ValidQueryMetricsRequest(request *grpc_inventory_manager_go.QueryMetricsReq
 
 	return nil
 }
+
+func ValidFullAssetID(request *grpc_inventory_manager_go.FullAssetId) derrors.Error {
+	if request.OrganizationId == "" {
+		return derrors.NewInvalidArgumentError("organization_id cannot be empty")
+	}
+	if request.EdgeControllerId == "" {
+		return derrors.NewInvalidArgumentError("edge_controller_id cannot be empty")
+	}
+	if request.AssetId == "" {
+		return derrors.NewInvalidArgumentError("asset_id cannot be empty")
+	}
+	return nil
+}

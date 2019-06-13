@@ -131,3 +131,13 @@ func (m *Manager) UnlinkEC(edge *grpc_inventory_go.EdgeControllerId) (*grpc_comm
 	defer cancel()
 	return  edgeClient.Unlink(ctx, &grpc_common_go.Empty{})
 }
+
+func (m *Manager) UninstallAgent(assetID *grpc_inventory_manager_go.FullAssetId) (*grpc_common_go.Success, error) {
+	edgeClient, aErr := m.getEICClient(assetID.EdgeControllerId)
+	if aErr != nil{
+		return nil, conversions.ToGRPCError(aErr)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
+	defer cancel()
+	return  edgeClient.UninstallAgent(ctx, assetID)
+}
