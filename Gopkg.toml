@@ -12,11 +12,11 @@
 
 [[constraint]]
     name = "github.com/nalej/grpc-edge-inventory-proxy-go"
-    version="v0.0.10"
+    version="v0.0.11"
 
 [[constraint]]
     name = "github.com/nalej/grpc-inventory-manager-go"
-    version="v0.0.33"
+    version="v0.0.37"
 
 [[constraint]]
     name = "github.com/nalej/grpc-edge-controller-go"

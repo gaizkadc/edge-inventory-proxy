@@ -75,6 +75,20 @@ func (h *Handler) CallbackAgentOperation(_ context.Context, opResponse *grpc_inv
 
 }
 
+func (h *Handler) AgentUninstalled(_ context.Context, assetId *grpc_inventory_go.AssetUninstalledId) (*grpc_common_go.Success, error) {
+
+	vErr := entities.ValidAssetUninstalledId(assetId)
+	if vErr != nil {
+		return nil, conversions.ToGRPCError(vErr)
+	}
+	err := h.manager.AgentUninstalled(assetId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &grpc_common_go.Success{}, nil
+}
+
 
 // ----------------
 // Edge Controller
