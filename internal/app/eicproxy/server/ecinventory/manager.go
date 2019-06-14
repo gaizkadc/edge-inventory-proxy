@@ -71,3 +71,9 @@ func (m *Manager) CallbackAgentOperation(opResponse *grpc_inventory_manager_go.A
 	defer cancel()
 	return m.inventoryOpsProducer.Send(ctx, opResponse)
 }
+
+func (m *Manager) AgentUninstalled(assetId *grpc_inventory_go.AssetUninstalledId) error {
+	ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+	defer cancel()
+	return m.inventoryProducer.Send(ctx, assetId)
+}
