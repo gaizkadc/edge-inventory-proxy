@@ -71,6 +71,21 @@ func (m*Manager) getEICClient(edgeControllerID string) (grpc_edge_controller_go.
 	return client, nil
 }
 
+func (m*Manager) InstallAgent(_ context.Context, request *grpc_inventory_manager_go.InstallAgentRequest) (*grpc_inventory_manager_go.InstallAgentResponse, error) {
+	edgeClient, aErr := m.getEICClient(request.EdgeControllerId)
+	if aErr != nil{
+		return nil, conversions.ToGRPCError(aErr)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
+	defer cancel()
+	response, err := edgeClient.InstallAgent(ctx, request)
+	if err != nil{
+		return nil, err
+	}
+	log.Debug().Interface("response", response).Msg("install agent request sent")
+	return response, nil
+}
+
 func (m*Manager) CreateAgentJoinToken(edgeControllerID *grpc_inventory_go.EdgeControllerId) (*grpc_inventory_manager_go.AgentJoinToken, error) {
 	edgeClient, aErr := m.getEICClient(edgeControllerID.EdgeControllerId)
 	if aErr != nil{

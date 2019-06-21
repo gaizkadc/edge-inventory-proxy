@@ -49,6 +49,12 @@ func (m *Manager) EICAlive(id *grpc_inventory_go.EdgeControllerId) derrors.Error
 	return m.inventoryProducer.Send(ctx, id)
 }
 
+func (m*Manager)CallbackECOperation(response *grpc_inventory_manager_go.EdgeControllerOpResponse) derrors.Error {
+	ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+	defer cancel()
+	return m.inventoryOpsProducer.Send(ctx, response)
+}
+
 // ------------
 // Agent
 // ------------
