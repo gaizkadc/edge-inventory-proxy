@@ -20,6 +20,19 @@ func ValidEdgeControllerId(id * grpc_inventory_go.EdgeControllerId) derrors.Erro
 	return nil
 }
 
+func ValidEdgeControllerOpResponse(response * grpc_inventory_manager_go.EdgeControllerOpResponse) derrors.Error{
+	if response.OrganizationId == ""{
+		return derrors.NewInvalidArgumentError("organization_id cannot be empty")
+	}
+	if response.EdgeControllerId == ""{
+		return derrors.NewInvalidArgumentError("edge_controller_id cannot be empty")
+	}
+	if response.OperationId == ""{
+		return derrors.NewInvalidArgumentError("operation_id cannot be empty")
+	}
+	return nil
+}
+
 func ValidEICStartInfo(info * grpc_inventory_manager_go.EICStartInfo) derrors.Error{
 	if info.OrganizationId == ""{
 		return derrors.NewInvalidArgumentError("organization_id cannot be empty")
@@ -29,6 +42,19 @@ func ValidEICStartInfo(info * grpc_inventory_manager_go.EICStartInfo) derrors.Er
 	}
 	if info.Ip == ""{
 		return derrors.NewInvalidArgumentError("ip cannot be empty")
+	}
+	return nil
+}
+
+func ValidInstallAgentRequest(request *grpc_inventory_manager_go.InstallAgentRequest) derrors.Error{
+	if request.OrganizationId == ""{
+		return derrors.NewInvalidArgumentError("organization_id cannot be empty")
+	}
+	if request.EdgeControllerId == ""{
+		return derrors.NewInvalidArgumentError("edge_controller_id cannot be empty")
+	}
+	if request.TargetHost == ""{
+		return derrors.NewInvalidArgumentError("target_host cannot be empty")
 	}
 	return nil
 }

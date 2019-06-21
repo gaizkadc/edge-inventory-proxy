@@ -118,3 +118,15 @@ func (h *Handler) EICAlive(ctx context.Context, id *grpc_inventory_go.EdgeContro
 	return &grpc_common_go.Success{}, nil
 }
 
+
+func (h *Handler) CallbackECOperation(ctx context.Context, response *grpc_inventory_manager_go.EdgeControllerOpResponse) (*grpc_common_go.Success, error) {
+	vErr := entities.ValidEdgeControllerOpResponse(response)
+	if vErr != nil{
+		return nil, conversions.ToGRPCError(vErr)
+	}
+	err := h.manager.CallbackECOperation(response)
+	if err != nil{
+		return nil, conversions.ToGRPCError(err)
+	}
+	return &grpc_common_go.Success{}, nil
+}
