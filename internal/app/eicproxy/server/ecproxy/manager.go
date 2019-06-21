@@ -71,7 +71,7 @@ func (m*Manager) getEICClient(edgeControllerID string) (grpc_edge_controller_go.
 	return client, nil
 }
 
-func (m*Manager) InstallAgent(_ context.Context, request *grpc_inventory_manager_go.InstallAgentRequest) (*grpc_inventory_manager_go.InstallAgentResponse, error) {
+func (m*Manager) InstallAgent(request *grpc_inventory_manager_go.InstallAgentRequest) (*grpc_inventory_manager_go.InstallAgentResponse, error) {
 	edgeClient, aErr := m.getEICClient(request.EdgeControllerId)
 	if aErr != nil{
 		return nil, conversions.ToGRPCError(aErr)
