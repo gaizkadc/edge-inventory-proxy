@@ -81,10 +81,10 @@ func (h *Handler) UnlinkEC(_ context.Context, edgeControllerID *grpc_inventory_g
 	return h.manager.UnlinkEC(edgeControllerID)
 }
 
-func (h *Handler) UninstallAgent(_ context.Context, assetID *grpc_inventory_manager_go.FullAssetId) (*grpc_common_go.Success, error) {
+func (h *Handler) UninstallAgent(_ context.Context, assetID *grpc_inventory_manager_go.FullUninstallAgentRequest) (*grpc_common_go.Success, error) {
 	log.Debug().Str("edge_controller_id", assetID.EdgeControllerId).Str("asset_id", assetID.AssetId).Msg("uninstall msg received")
 
-	vErr := entities.ValidFullAssetID(assetID)
+	vErr := entities.ValidFullUninstallAgentRequest(assetID)
 	if vErr != nil {
 		return nil, conversions.ToGRPCError(vErr)
 	}
