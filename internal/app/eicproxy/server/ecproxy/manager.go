@@ -71,7 +71,7 @@ func (m*Manager) getEICClient(edgeControllerID string) (grpc_edge_controller_go.
 	return client, nil
 }
 
-func (m*Manager) InstallAgent(request *grpc_inventory_manager_go.InstallAgentRequest) (*grpc_inventory_manager_go.InstallAgentResponse, error) {
+func (m*Manager) InstallAgent(request *grpc_inventory_manager_go.InstallAgentRequest) (*grpc_inventory_manager_go.EdgeControllerOpResponse, error) {
 	edgeClient, aErr := m.getEICClient(request.EdgeControllerId)
 	if aErr != nil{
 		return nil, conversions.ToGRPCError(aErr)
@@ -147,7 +147,7 @@ func (m *Manager) UnlinkEC(edge *grpc_inventory_go.EdgeControllerId) (*grpc_comm
 	return  edgeClient.Unlink(ctx, &grpc_common_go.Empty{})
 }
 
-func (m *Manager) UninstallAgent(assetID *grpc_inventory_manager_go.FullUninstallAgentRequest) (*grpc_common_go.Success, error) {
+func (m *Manager) UninstallAgent(assetID *grpc_inventory_manager_go.FullUninstallAgentRequest) (*grpc_inventory_manager_go.EdgeControllerOpResponse, error) {
 	edgeClient, aErr := m.getEICClient(assetID.EdgeControllerId)
 	if aErr != nil{
 		return nil, conversions.ToGRPCError(aErr)
