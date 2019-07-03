@@ -26,7 +26,7 @@ func NewHandler(manager Manager) *Handler {
 }
 
 
-func (h *Handler) InstallAgent(_ context.Context, request *grpc_inventory_manager_go.InstallAgentRequest) (*grpc_inventory_manager_go.InstallAgentResponse, error) {
+func (h *Handler) InstallAgent(_ context.Context, request *grpc_inventory_manager_go.InstallAgentRequest) (*grpc_inventory_manager_go.EdgeControllerOpResponse, error) {
 	verr := entities.ValidInstallAgentRequest(request)
 	if verr != nil {
 		return nil, conversions.ToGRPCError(verr)
@@ -81,7 +81,7 @@ func (h *Handler) UnlinkEC(_ context.Context, edgeControllerID *grpc_inventory_g
 	return h.manager.UnlinkEC(edgeControllerID)
 }
 
-func (h *Handler) UninstallAgent(_ context.Context, assetID *grpc_inventory_manager_go.FullUninstallAgentRequest) (*grpc_common_go.Success, error) {
+func (h *Handler) UninstallAgent(_ context.Context, assetID *grpc_inventory_manager_go.FullUninstallAgentRequest) (*grpc_inventory_manager_go.EdgeControllerOpResponse, error) {
 	log.Debug().Str("edge_controller_id", assetID.EdgeControllerId).Str("asset_id", assetID.AssetId).Msg("uninstall msg received")
 
 	vErr := entities.ValidFullUninstallAgentRequest(assetID)
