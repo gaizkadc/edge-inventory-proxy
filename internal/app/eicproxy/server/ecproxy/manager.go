@@ -108,7 +108,11 @@ func (m*Manager) TriggerAgentOperation(request *grpc_inventory_manager_go.AgentO
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
 	defer cancel()
-	return  edgeClient.TriggerAgentOperation(ctx, request)
+	res, err :=  edgeClient.TriggerAgentOperation(ctx, request)
+	if err != nil {
+		return nil, m.ConvertError(err, "trigger agent operation")
+	}
+	return res, nil
 }
 
 func (m*Manager) Configure(request *grpc_inventory_manager_go.ConfigureEICRequest) (*grpc_common_go.Success, error) {
@@ -122,7 +126,11 @@ func (m*Manager) ListMetrics(selector *grpc_inventory_manager_go.AssetSelector) 
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
 	defer cancel()
-	return edgeClient.ListMetrics(ctx, selector)
+	metrics, err :=  edgeClient.ListMetrics(ctx, selector)
+	if err != nil {
+		return nil, m.ConvertError(err, "list metrics")
+	}
+	return metrics, nil
 }
 
 func (m*Manager) QueryMetrics(request *grpc_inventory_manager_go.QueryMetricsRequest) (*grpc_inventory_manager_go.QueryMetricsResult, error) {
@@ -132,7 +140,11 @@ func (m*Manager) QueryMetrics(request *grpc_inventory_manager_go.QueryMetricsReq
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
 	defer cancel()
-	return edgeClient.QueryMetrics(ctx, request)
+	metrics, err := edgeClient.QueryMetrics(ctx, request)
+	if err != nil {
+		return nil, m.ConvertError(err, "query metrics")
+	}
+	return metrics, nil
 }
 
 func (m *Manager) UnlinkEC(edge *grpc_inventory_go.EdgeControllerId) (*grpc_common_go.Success, error){
