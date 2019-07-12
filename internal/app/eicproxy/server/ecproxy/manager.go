@@ -80,7 +80,7 @@ func (m*Manager) InstallAgent(request *grpc_inventory_manager_go.InstallAgentReq
 	defer cancel()
 	response, err := edgeClient.InstallAgent(ctx, request)
 	if err != nil{
-		return nil, err
+		return nil, m.ConvertError(err, "install agent")
 	}
 	log.Debug().Interface("response", response).Msg("install agent request sent")
 	return response, nil
@@ -95,7 +95,7 @@ func (m*Manager) CreateAgentJoinToken(edgeControllerID *grpc_inventory_go.EdgeCo
 	defer cancel()
 	token, err := edgeClient.CreateAgentJoinToken(ctx, edgeControllerID)
 	if err != nil{
-		return nil, err
+		return nil, m.ConvertError(err, "create agent-join-token")
 	}
 	log.Debug().Str("token", token.Token).Msg("agent join token has been created")
 	return token, nil
@@ -144,7 +144,12 @@ func (m *Manager) UnlinkEC(edge *grpc_inventory_go.EdgeControllerId) (*grpc_comm
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
 	defer cancel()
-	return  edgeClient.Unlink(ctx, &grpc_common_go.Empty{})
+	res, err :=  edgeClient.Unlink(ctx, &grpc_common_go.Empty{})
+	if err != nil {
+		return nil, m.ConvertError(err, "unlink")
+	}else {
+		return res, err
+	}
 }
 
 func (m *Manager) UninstallAgent(assetID *grpc_inventory_manager_go.FullUninstallAgentRequest) (*grpc_inventory_manager_go.EdgeControllerOpResponse, error) {
@@ -152,7 +157,28 @@ func (m *Manager) UninstallAgent(assetID *grpc_inventory_manager_go.FullUninstal
 	if aErr != nil{
 		return nil, conversions.ToGRPCError(aErr)
 	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
 	defer cancel()
-	return  edgeClient.UninstallAgent(ctx, assetID)
+
+	res, err := edgeClient.UninstallAgent(ctx, assetID)
+
+	if err != nil {
+		return nil, m.ConvertError(err, "uninstall agent")
+	}else {
+		return res, err
+	}
+
+}
+
+func (m *Manager) ConvertError(err error, msg string)  error {
+
+	if conversions.ToDerror(err).Type() == derrors.Unavailable ||
+		conversions.ToDerror(err).Type() == derrors.DeadlineExceeded{
+		return conversions.ToGRPCError(derrors.NewUnavailableError(
+			fmt.Sprintf("unable to %s, EC not connected", msg), err))
+	}else{
+		return err
+	}
+
 }
