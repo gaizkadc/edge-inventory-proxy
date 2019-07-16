@@ -20,7 +20,7 @@ var runCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		SetupLogging()
 		log.Info().Msg("Launching gRPC EIP!")
-
+		cfg.Debug = debugLevel
 		server := server.NewService(cfg)
 		server.Run()
 	},
