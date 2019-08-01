@@ -167,6 +167,14 @@
   version = "v0.0.55"
 
 [[projects]]
+  digest = "1:9c4948fc5141c6c3e5287e5a7c60b06e1465751012c5451dc5d9ee8b045d2c7c"
+  name = "github.com/nalej/grpc-monitoring-go"
+  packages = ["."]
+  pruneopts = ""
+  revision = "0004501b8eb8a1fac8a69f1fa8e36c845ee33783"
+  version = "v0.0.4"
+
+[[projects]]
   digest = "1:f41783cc6d03c6734fe9bb8b42ca4aa87651430e98cd8fe0ad5c72ca30da2efa"
   name = "github.com/nalej/grpc-network-go"
   packages = ["."]
@@ -358,6 +366,7 @@
     "github.com/nalej/grpc-edge-inventory-proxy-go",
     "github.com/nalej/grpc-inventory-go",
     "github.com/nalej/grpc-inventory-manager-go",
+    "github.com/nalej/grpc-monitoring-go",
     "github.com/nalej/grpc-network-go",
     "github.com/nalej/grpc-utils/pkg/conversions",
     "github.com/nalej/nalej-bus/pkg/bus/pulsar-comcast",

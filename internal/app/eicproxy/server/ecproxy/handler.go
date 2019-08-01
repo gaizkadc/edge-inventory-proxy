@@ -11,6 +11,7 @@ import (
 	"github.com/nalej/grpc-common-go"
 	"github.com/nalej/grpc-inventory-go"
 	"github.com/nalej/grpc-inventory-manager-go"
+	"github.com/nalej/grpc-monitoring-go"
 	"github.com/nalej/grpc-utils/pkg/conversions"
 	"github.com/rs/zerolog/log"
 )
@@ -54,7 +55,7 @@ func (h*Handler) Configure(_ context.Context, request *grpc_inventory_manager_go
 	return nil, conversions.ToGRPCError(derrors.NewUnimplementedError("Configure call not implemented"))
 }
 
-func (h*Handler) ListMetrics(_ context.Context, selector *grpc_inventory_manager_go.AssetSelector) (*grpc_inventory_manager_go.MetricsList, error) {
+func (h*Handler) ListMetrics(_ context.Context, selector *grpc_inventory_go.AssetSelector) (*grpc_monitoring_go.MetricsList, error) {
 	derr := entities.ValidAssetSelector(selector)
 	if derr != nil {
 		return nil, conversions.ToGRPCError(derr)
@@ -62,7 +63,7 @@ func (h*Handler) ListMetrics(_ context.Context, selector *grpc_inventory_manager
 	return h.manager.ListMetrics(selector)
 }
 
-func (h*Handler) QueryMetrics(_ context.Context, request *grpc_inventory_manager_go.QueryMetricsRequest) (*grpc_inventory_manager_go.QueryMetricsResult, error) {
+func (h*Handler) QueryMetrics(_ context.Context, request *grpc_monitoring_go.QueryMetricsRequest) (*grpc_monitoring_go.QueryMetricsResult, error) {
 	derr := entities.ValidQueryMetricsRequest(request)
 	if derr != nil {
 		return nil, conversions.ToGRPCError(derr)

@@ -8,6 +8,7 @@ import (
 	"github.com/nalej/derrors"
 	"github.com/nalej/grpc-inventory-go"
 	"github.com/nalej/grpc-inventory-manager-go"
+	"github.com/nalej/grpc-monitoring-go"
 )
 
 func ValidEdgeControllerId(id * grpc_inventory_go.EdgeControllerId) derrors.Error{
@@ -121,7 +122,7 @@ func ValidAgentOpResponse (request *grpc_inventory_manager_go.AgentOpResponse) d
 	return nil
 }
 
-func ValidAssetSelector(selector *grpc_inventory_manager_go.AssetSelector) derrors.Error {
+func ValidAssetSelector(selector *grpc_inventory_go.AssetSelector) derrors.Error {
 	// For the proxy to properly connect we need an Edge Controller ID.
 	// Other validation is done by the Edge Controller.
 	if selector == nil {
@@ -136,7 +137,7 @@ func ValidAssetSelector(selector *grpc_inventory_manager_go.AssetSelector) derro
 	return nil
 }
 
-func ValidQueryMetricsRequest(request *grpc_inventory_manager_go.QueryMetricsRequest) derrors.Error {
+func ValidQueryMetricsRequest(request *grpc_monitoring_go.QueryMetricsRequest) derrors.Error {
 	// We check the asset selector so we know we have an edge controller ID.
 	// The rest is verified by the Edge Controller so we don't have to
 	// adapt the proxy if functionality changes.
