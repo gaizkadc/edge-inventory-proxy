@@ -14,6 +14,7 @@ import (
 	"github.com/nalej/grpc-edge-controller-go"
 	"github.com/nalej/grpc-inventory-go"
 	"github.com/nalej/grpc-inventory-manager-go"
+	"github.com/nalej/grpc-monitoring-go"
 	"github.com/nalej/grpc-utils/pkg/conversions"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
@@ -119,7 +120,7 @@ func (m*Manager) Configure(request *grpc_inventory_manager_go.ConfigureEICReques
 	return nil, conversions.ToGRPCError(derrors.NewUnimplementedError("configure call not implemented"))
 }
 
-func (m*Manager) ListMetrics(selector *grpc_inventory_manager_go.AssetSelector) (*grpc_inventory_manager_go.MetricsList, error) {
+func (m*Manager) ListMetrics(selector *grpc_inventory_go.AssetSelector) (*grpc_monitoring_go.MetricsList, error) {
 	edgeClient, aErr := m.getEICClient(selector.GetEdgeControllerId())
 	if aErr != nil{
 		return nil, conversions.ToGRPCError(aErr)
@@ -133,7 +134,7 @@ func (m*Manager) ListMetrics(selector *grpc_inventory_manager_go.AssetSelector) 
 	return metrics, nil
 }
 
-func (m*Manager) QueryMetrics(request *grpc_inventory_manager_go.QueryMetricsRequest) (*grpc_inventory_manager_go.QueryMetricsResult, error) {
+func (m*Manager) QueryMetrics(request *grpc_monitoring_go.QueryMetricsRequest) (*grpc_monitoring_go.QueryMetricsResult, error) {
 	edgeClient, aErr := m.getEICClient(request.GetAssets().GetEdgeControllerId())
 	if aErr != nil{
 		return nil, conversions.ToGRPCError(aErr)
