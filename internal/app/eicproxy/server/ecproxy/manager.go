@@ -72,14 +72,19 @@ func (m*Manager) getEICClient(edgeControllerID string) (grpc_edge_controller_go.
 	return client, conn, nil
 }
 
+func (m*Manager) CloseConnection(conn *grpc.ClientConn){
+	if conn != nil {
+		conn.Close()
+	}
+}
+
 func (m*Manager) InstallAgent(request *grpc_inventory_manager_go.InstallAgentRequest) (*grpc_inventory_manager_go.EdgeControllerOpResponse, error) {
 	edgeClient, conn, aErr := m.getEICClient(request.EdgeControllerId)
+	defer m.CloseConnection(conn)
 	if aErr != nil{
 		return nil, conversions.ToGRPCError(aErr)
 	}
-	if conn != nil {
-		defer conn.Close()
-	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
 	defer cancel()
 	response, err := edgeClient.InstallAgent(ctx, request)
@@ -92,11 +97,9 @@ func (m*Manager) InstallAgent(request *grpc_inventory_manager_go.InstallAgentReq
 
 func (m*Manager) CreateAgentJoinToken(edgeControllerID *grpc_inventory_go.EdgeControllerId) (*grpc_inventory_manager_go.AgentJoinToken, error) {
 	edgeClient, conn, aErr := m.getEICClient(edgeControllerID.EdgeControllerId)
+	defer m.CloseConnection(conn)
 	if aErr != nil{
 		return nil, conversions.ToGRPCError(aErr)
-	}
-	if conn != nil {
-		defer conn.Close()
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
 	defer cancel()
@@ -109,13 +112,13 @@ func (m*Manager) CreateAgentJoinToken(edgeControllerID *grpc_inventory_go.EdgeCo
 }
 
 func (m*Manager) TriggerAgentOperation(request *grpc_inventory_manager_go.AgentOpRequest) (*grpc_inventory_manager_go.AgentOpResponse, error) {
+
 	edgeClient, conn, aErr := m.getEICClient(request.EdgeControllerId)
+	defer m.CloseConnection(conn)
 	if aErr != nil{
 		return nil, conversions.ToGRPCError(aErr)
 	}
-	if conn != nil {
-		defer conn.Close()
-	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
 	defer cancel()
 	res, err :=  edgeClient.TriggerAgentOperation(ctx, request)
@@ -131,12 +134,12 @@ func (m*Manager) Configure(request *grpc_inventory_manager_go.ConfigureEICReques
 
 func (m*Manager) ListMetrics(selector *grpc_inventory_go.AssetSelector) (*grpc_monitoring_go.MetricsList, error) {
 	edgeClient, conn, aErr := m.getEICClient(selector.GetEdgeControllerId())
+	defer m.CloseConnection(conn)
+
 	if aErr != nil{
 		return nil, conversions.ToGRPCError(aErr)
 	}
-	if conn != nil {
-		defer conn.Close()
-	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
 	defer cancel()
 	metrics, err :=  edgeClient.ListMetrics(ctx, selector)
@@ -148,12 +151,11 @@ func (m*Manager) ListMetrics(selector *grpc_inventory_go.AssetSelector) (*grpc_m
 
 func (m*Manager) QueryMetrics(request *grpc_monitoring_go.QueryMetricsRequest) (*grpc_monitoring_go.QueryMetricsResult, error) {
 	edgeClient, conn, aErr := m.getEICClient(request.GetAssets().GetEdgeControllerId())
+	defer m.CloseConnection(conn)
 	if aErr != nil{
 		return nil, conversions.ToGRPCError(aErr)
 	}
-	if conn != nil {
-		defer conn.Close()
-	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
 	defer cancel()
 	metrics, err := edgeClient.QueryMetrics(ctx, request)
@@ -167,12 +169,12 @@ func (m *Manager) UnlinkEC(edge *grpc_inventory_go.EdgeControllerId) (*grpc_comm
 	log.Debug().Msg("UnlinkEIC received")
 
 	edgeClient, conn, aErr := m.getEICClient(edge.EdgeControllerId)
+	defer m.CloseConnection(conn)
+
 	if aErr != nil{
 		return nil, conversions.ToGRPCError(aErr)
 	}
-	if conn != nil {
-		defer conn.Close()
-	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
 	defer cancel()
 	res, err :=  edgeClient.Unlink(ctx, &grpc_common_go.Empty{})
@@ -185,12 +187,12 @@ func (m *Manager) UnlinkEC(edge *grpc_inventory_go.EdgeControllerId) (*grpc_comm
 
 func (m *Manager) UninstallAgent(assetID *grpc_inventory_manager_go.FullUninstallAgentRequest) (*grpc_inventory_manager_go.EdgeControllerOpResponse, error) {
 	edgeClient, conn, aErr := m.getEICClient(assetID.EdgeControllerId)
+	defer m.CloseConnection(conn)
+
 	if aErr != nil{
 		return nil, conversions.ToGRPCError(aErr)
 	}
-	if conn != nil {
-		defer conn.Close()
-	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
 	defer cancel()
 
