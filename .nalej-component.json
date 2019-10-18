@@ -1,6 +1,10 @@
 {
   "language": "golang",
+  "version": "v0.4.0",
   "application_list": [
+    "edge-inventory-proxy eip-sidecar"
+  ],
+  "image_list": [
     "edge-inventory-proxy eip-sidecar"
   ],
   "tools": [
