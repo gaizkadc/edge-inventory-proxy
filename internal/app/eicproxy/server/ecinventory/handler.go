@@ -51,7 +51,7 @@ func (h *Handler) AgentJoin(_ context.Context, request *grpc_inventory_manager_g
 	return h.manager.AgentJoin(request)
 }
 
-func (h *Handler)  LogAgentAlive(_ context.Context, request *grpc_inventory_manager_go.AgentsAlive) (*grpc_common_go.Success, error){
+func (h *Handler) LogAgentAlive(_ context.Context, request *grpc_inventory_manager_go.AgentsAlive) (*grpc_common_go.Success, error) {
 	vErr := entities.ValidAgentsAlive(request)
 	if vErr != nil {
 		return nil, conversions.ToGRPCError(vErr)
@@ -61,7 +61,7 @@ func (h *Handler)  LogAgentAlive(_ context.Context, request *grpc_inventory_mana
 		Int("agents", len(request.Agents)).Msg("Agents Alive")
 
 	err := h.manager.LogAgentAlive(request)
-	if err != nil{
+	if err != nil {
 		return nil, conversions.ToGRPCError(err)
 	}
 	return &grpc_common_go.Success{}, nil
@@ -70,13 +70,12 @@ func (h *Handler)  LogAgentAlive(_ context.Context, request *grpc_inventory_mana
 // CallbackAgentOperation is called by the EIC upon execution of the operation by the agent.
 func (h *Handler) CallbackAgentOperation(_ context.Context, opResponse *grpc_inventory_manager_go.AgentOpResponse) (*grpc_common_go.Success, error) {
 	vErr := entities.ValidAgentOpResponse(opResponse)
-	if  vErr != nil {
+	if vErr != nil {
 		return nil, conversions.ToGRPCError(vErr)
 	}
 
 	log.Debug().Str("organization_id", opResponse.OrganizationId).Str("edge_controller_id", opResponse.EdgeControllerId).
 		Str("asset_id", opResponse.AssetId).Str("operation_id", opResponse.OperationId).Msg("CallbackAgentOperation")
-
 
 	err := h.manager.CallbackAgentOperation(opResponse)
 	if err != nil {
@@ -101,18 +100,17 @@ func (h *Handler) AgentUninstalled(_ context.Context, assetId *grpc_inventory_go
 	return &grpc_common_go.Success{}, nil
 }
 
-
 // ----------------
 // Edge Controller
 // ----------------
 func (h *Handler) EICStart(ctx context.Context, request *grpc_inventory_manager_go.EICStartInfo) (*grpc_common_go.Success, error) {
 	vErr := entities.ValidEICStartInfo(request)
-	if vErr != nil{
+	if vErr != nil {
 		return nil, conversions.ToGRPCError(vErr)
 	}
 	log.Debug().Str("organization_id", request.OrganizationId).Str("edge_controller_id", request.EdgeControllerId).Str("ip", request.Ip).Msg("EC starts")
 	err := h.manager.EICStart(request)
-	if err != nil{
+	if err != nil {
 		return nil, conversions.ToGRPCError(err)
 	}
 	return &grpc_common_go.Success{}, nil
@@ -120,24 +118,23 @@ func (h *Handler) EICStart(ctx context.Context, request *grpc_inventory_manager_
 
 func (h *Handler) EICAlive(ctx context.Context, id *grpc_inventory_go.EdgeControllerId) (*grpc_common_go.Success, error) {
 	vErr := entities.ValidEdgeControllerId(id)
-	if vErr != nil{
+	if vErr != nil {
 		return nil, conversions.ToGRPCError(vErr)
 	}
 	err := h.manager.EICAlive(id)
-	if err != nil{
+	if err != nil {
 		return nil, conversions.ToGRPCError(err)
 	}
 	return &grpc_common_go.Success{}, nil
 }
 
-
 func (h *Handler) CallbackECOperation(ctx context.Context, response *grpc_inventory_manager_go.EdgeControllerOpResponse) (*grpc_common_go.Success, error) {
 	vErr := entities.ValidEdgeControllerOpResponse(response)
-	if vErr != nil{
+	if vErr != nil {
 		return nil, conversions.ToGRPCError(vErr)
 	}
 	err := h.manager.CallbackECOperation(response)
-	if err != nil{
+	if err != nil {
 		return nil, conversions.ToGRPCError(err)
 	}
 	return &grpc_common_go.Success{}, nil

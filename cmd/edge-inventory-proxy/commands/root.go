@@ -30,9 +30,9 @@ var debugLevel bool
 var consoleLogging bool
 
 var rootCmd = &cobra.Command{
-	Use:   "edge-inventory-proxy",
-	Short: "Edge Inventory Proxy command",
-	Long:  `Edge Inventory Proxy command`,
+	Use:     "edge-inventory-proxy",
+	Short:   "Edge Inventory Proxy command",
+	Long:    `Edge Inventory Proxy command`,
 	Version: "unknown-version",
 
 	Run: func(cmd *cobra.Command, args []string) {

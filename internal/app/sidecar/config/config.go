@@ -50,11 +50,11 @@ func (conf *Config) Validate() derrors.Error {
 	if conf.ProxyName == "" {
 		return derrors.NewInvalidArgumentError("proxyName cannot be empty")
 	}
-	if conf.NetworkManagerAddress == ""{
+	if conf.NetworkManagerAddress == "" {
 		return derrors.NewInvalidArgumentError("networkManagerAddress cannot be empty")
 	}
 
-	if conf.Username == "" || conf.Password == ""{
+	if conf.Username == "" || conf.Password == "" {
 		return derrors.NewInvalidArgumentError("username and password must be specified")
 	}
 

@@ -30,9 +30,9 @@ var debugLevel bool
 var consoleLogging bool
 
 var rootCmd = &cobra.Command{
-	Use:   "eip-sidecar",
-	Short: "Edge Inventory Proxy Sidecar command",
-	Long:  `Edge Inventory Proxy Sidecar command`,
+	Use:     "eip-sidecar",
+	Short:   "Edge Inventory Proxy Sidecar command",
+	Long:    `Edge Inventory Proxy Sidecar command`,
 	Version: "unknown-version",
 
 	Run: func(cmd *cobra.Command, args []string) {

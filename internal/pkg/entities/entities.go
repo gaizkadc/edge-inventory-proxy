@@ -23,60 +23,60 @@ import (
 	"github.com/nalej/grpc-monitoring-go"
 )
 
-func ValidEdgeControllerId(id * grpc_inventory_go.EdgeControllerId) derrors.Error{
-	if id.OrganizationId == ""{
+func ValidEdgeControllerId(id *grpc_inventory_go.EdgeControllerId) derrors.Error {
+	if id.OrganizationId == "" {
 		return derrors.NewInvalidArgumentError("organization_id cannot be empty")
 	}
-	if id.EdgeControllerId == ""{
+	if id.EdgeControllerId == "" {
 		return derrors.NewInvalidArgumentError("edge_controller_id cannot be empty")
 	}
 	return nil
 }
 
-func ValidEdgeControllerOpResponse(response * grpc_inventory_manager_go.EdgeControllerOpResponse) derrors.Error{
-	if response.OrganizationId == ""{
+func ValidEdgeControllerOpResponse(response *grpc_inventory_manager_go.EdgeControllerOpResponse) derrors.Error {
+	if response.OrganizationId == "" {
 		return derrors.NewInvalidArgumentError("organization_id cannot be empty")
 	}
-	if response.EdgeControllerId == ""{
+	if response.EdgeControllerId == "" {
 		return derrors.NewInvalidArgumentError("edge_controller_id cannot be empty")
 	}
-	if response.OperationId == ""{
+	if response.OperationId == "" {
 		return derrors.NewInvalidArgumentError("operation_id cannot be empty")
 	}
 	return nil
 }
 
-func ValidEICStartInfo(info * grpc_inventory_manager_go.EICStartInfo) derrors.Error{
-	if info.OrganizationId == ""{
+func ValidEICStartInfo(info *grpc_inventory_manager_go.EICStartInfo) derrors.Error {
+	if info.OrganizationId == "" {
 		return derrors.NewInvalidArgumentError("organization_id cannot be empty")
 	}
-	if info.EdgeControllerId == ""{
+	if info.EdgeControllerId == "" {
 		return derrors.NewInvalidArgumentError("edge_controller_id cannot be empty")
 	}
-	if info.Ip == ""{
+	if info.Ip == "" {
 		return derrors.NewInvalidArgumentError("ip cannot be empty")
 	}
 	return nil
 }
 
-func ValidInstallAgentRequest(request *grpc_inventory_manager_go.InstallAgentRequest) derrors.Error{
-	if request.OrganizationId == ""{
+func ValidInstallAgentRequest(request *grpc_inventory_manager_go.InstallAgentRequest) derrors.Error {
+	if request.OrganizationId == "" {
 		return derrors.NewInvalidArgumentError("organization_id cannot be empty")
 	}
-	if request.EdgeControllerId == ""{
+	if request.EdgeControllerId == "" {
 		return derrors.NewInvalidArgumentError("edge_controller_id cannot be empty")
 	}
-	if request.TargetHost == ""{
+	if request.TargetHost == "" {
 		return derrors.NewInvalidArgumentError("target_host cannot be empty")
 	}
 	return nil
 }
 
-func ValidAgentJoinRequest (request *grpc_inventory_manager_go.AgentJoinRequest) derrors.Error {
-	if request.OrganizationId == ""{
+func ValidAgentJoinRequest(request *grpc_inventory_manager_go.AgentJoinRequest) derrors.Error {
+	if request.OrganizationId == "" {
 		return derrors.NewInvalidArgumentError("organization_id cannot be empty")
 	}
-	if request.EdgeControllerId == ""{
+	if request.EdgeControllerId == "" {
 		return derrors.NewInvalidArgumentError("edge_controller_id cannot be empty")
 	}
 	if request.AgentId == "" {
@@ -85,11 +85,11 @@ func ValidAgentJoinRequest (request *grpc_inventory_manager_go.AgentJoinRequest)
 	return nil
 }
 
-func ValidAgentsAlive (request *grpc_inventory_manager_go.AgentsAlive) derrors.Error {
-	if request.OrganizationId == ""{
+func ValidAgentsAlive(request *grpc_inventory_manager_go.AgentsAlive) derrors.Error {
+	if request.OrganizationId == "" {
 		return derrors.NewInvalidArgumentError("organization_id cannot be empty")
 	}
-	if request.EdgeControllerId == ""{
+	if request.EdgeControllerId == "" {
 		return derrors.NewInvalidArgumentError("edge_controller_id cannot be empty")
 	}
 	if request.Agents == nil || len(request.Agents) <= 0 {
@@ -97,7 +97,6 @@ func ValidAgentsAlive (request *grpc_inventory_manager_go.AgentsAlive) derrors.E
 	}
 	return nil
 }
-
 
 func ValidAgentOpRequest(request *grpc_inventory_manager_go.AgentOpRequest) derrors.Error {
 	if request.OrganizationId == "" {
@@ -118,7 +117,7 @@ func ValidAgentOpRequest(request *grpc_inventory_manager_go.AgentOpRequest) derr
 	return nil
 }
 
-func ValidAgentOpResponse (request *grpc_inventory_manager_go.AgentOpResponse) derrors.Error {
+func ValidAgentOpResponse(request *grpc_inventory_manager_go.AgentOpResponse) derrors.Error {
 	if request.OrganizationId == "" {
 		return derrors.NewInvalidArgumentError("organization_id cannot be empty")
 	}
@@ -174,7 +173,7 @@ func ValidFullUninstallAgentRequest(request *grpc_inventory_manager_go.FullUnins
 	return nil
 }
 
-func ValidAssetUninstalledId (request *grpc_inventory_go.AssetUninstalledId) derrors.Error {
+func ValidAssetUninstalledId(request *grpc_inventory_go.AssetUninstalledId) derrors.Error {
 	if request.OrganizationId == "" {
 		return derrors.NewInvalidArgumentError("organization_id cannot be empty")
 	}

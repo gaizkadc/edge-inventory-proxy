@@ -41,10 +41,10 @@ func (conf *Config) Validate() derrors.Error {
 		return derrors.NewInvalidArgumentError("port must be valid")
 	}
 
-	if conf.QueueAddress == ""{
+	if conf.QueueAddress == "" {
 		return derrors.NewInvalidArgumentError("queueAddress must not be empty")
 	}
-	if conf.DNSServer == ""{
+	if conf.DNSServer == "" {
 		return derrors.NewInvalidArgumentError("dnsServer must not be empty")
 	}
 	if conf.InventoryManagerAddress == "" {
