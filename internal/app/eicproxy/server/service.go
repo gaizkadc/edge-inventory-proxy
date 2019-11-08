@@ -50,7 +50,7 @@ type BusClients struct {
 }
 
 func (s *Service) GetBusClients() (*BusClients, derrors.Error) {
-	queueClient := pulsar_comcast.NewClient(s.Configuration.QueueAddress)
+	queueClient := pulsar_comcast.NewClient(s.Configuration.QueueAddress, nil)
 	invEventProducer, err := events.NewInventoryEventsProducer(queueClient, "eicproxy-invevents")
 	if err != nil {
 		return nil, err

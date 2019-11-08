@@ -1,14 +1,14 @@
 [[constraint]]
-    name="github.com/nalej/derrors"
-    version="=v2.0.0"
-
-[[constraint]]
     name="github.com/rs/zerolog"
     version="v1.8.0"
 
 [[constraint]]
     name="github.com/spf13/cobra"
     version="v0.0.3"
+
+[[constraint]]
+    name="github.com/nalej/derrors"
+    version="=v2.1.0"
 
 [[constraint]]
     name = "github.com/nalej/grpc-edge-inventory-proxy-go"
@@ -28,12 +28,12 @@
 
 [[constraint]]
     name = "github.com/nalej/grpc-monitoring-go"
-    version="=v0.0.5"
+    version="=v0.0.6"
 
 [[constraint]]
     name="github.com/nalej/grpc-network-go"
-    version="v0.0.40"
+    version="v0.0.45"
 
 [[constraint]]
     name="github.com/nalej/nalej-bus"
-    version="=v0.3.0"
+    version="=v0.4.0"
