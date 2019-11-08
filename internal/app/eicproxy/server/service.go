@@ -97,7 +97,7 @@ func (s *Service) Run() error {
 	}
 
 	busClients, bErr := s.GetBusClients()
-	if err != nil {
+	if bErr != nil {
 		log.Fatal().Str("err", bErr.DebugReport()).Msg("Cannot create bus clients")
 	}
 
