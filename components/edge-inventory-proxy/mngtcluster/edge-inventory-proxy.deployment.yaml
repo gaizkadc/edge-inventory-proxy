@@ -29,7 +29,6 @@ spec:
         imagePullPolicy: Always
         args:
         - "run"
-        - "--debug"
         - "--port=5544"
         - "--queueAddress=broker.__NPH_NAMESPACE:6650"
         - "--dnsServer=$(DNS_SERVER)"
@@ -47,7 +46,6 @@ spec:
         imagePullPolicy: Always
         args:
             - "run"
-            - "--debug"
             - "--vpnAddress=vpn-server.__NPH_NAMESPACE:5555"
             - "--networkManagerAddress=network-manager.__NPH_NAMESPACE:8000"
         securityContext:

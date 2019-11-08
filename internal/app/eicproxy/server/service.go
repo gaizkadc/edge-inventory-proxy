@@ -1,5 +1,17 @@
 /*
- * Copyright (C) 2019 Nalej - All Rights Reserved
+ * Copyright 2019 Nalej
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package server
@@ -33,13 +45,13 @@ func NewService(conf config.Config) *Service {
 }
 
 type BusClients struct {
-	inventoryEventsProducer * events.InventoryEventsProducer
-	inventoryOpsProducer * ops.InventoryOpsProducer
+	inventoryEventsProducer *events.InventoryEventsProducer
+	inventoryOpsProducer    *ops.InventoryOpsProducer
 }
 
-func (s*Service) GetBusClients() (*BusClients, derrors.Error) {
-	queueClient := pulsar_comcast.NewClient(s.Configuration.QueueAddress)
-	invEventProducer , err := events.NewInventoryEventsProducer(queueClient, "eicproxy-invevents")
+func (s *Service) GetBusClients() (*BusClients, derrors.Error) {
+	queueClient := pulsar_comcast.NewClient(s.Configuration.QueueAddress, nil)
+	invEventProducer, err := events.NewInventoryEventsProducer(queueClient, "eicproxy-invevents")
 	if err != nil {
 		return nil, err
 	}
@@ -50,14 +62,15 @@ func (s*Service) GetBusClients() (*BusClients, derrors.Error) {
 	}
 
 	return &BusClients{
-		inventoryEventsProducer:invEventProducer,
-		inventoryOpsProducer:invOpProducer,
+		inventoryEventsProducer: invEventProducer,
+		inventoryOpsProducer:    invOpProducer,
 	}, nil
 }
 
 type Clients struct {
 	agentClient grpc_inventory_manager_go.AgentClient
 }
+
 func (s *Service) GetClients() (*Clients, derrors.Error) {
 
 	invManagerConn, err := grpc.Dial(s.Configuration.InventoryManagerAddress, grpc.WithInsecure())
@@ -67,7 +80,7 @@ func (s *Service) GetClients() (*Clients, derrors.Error) {
 
 	agentClient := grpc_inventory_manager_go.NewAgentClient(invManagerConn)
 
-	return &Clients{agentClient:agentClient}, nil
+	return &Clients{agentClient: agentClient}, nil
 }
 
 // Run the service, launch the REST service handler.
@@ -78,14 +91,13 @@ func (s *Service) Run() error {
 	}
 	s.Configuration.Print()
 
-
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Configuration.EipPort))
 	if err != nil {
 		log.Fatal().Errs("failed to listen: %v", []error{err})
 	}
 
 	busClients, bErr := s.GetBusClients()
-	if err != nil{
+	if bErr != nil {
 		log.Fatal().Str("err", bErr.DebugReport()).Msg("Cannot create bus clients")
 	}
 
@@ -94,7 +106,6 @@ func (s *Service) Run() error {
 		log.Fatal().Str("err", cErr.DebugReport()).Msg("cannot generate clients")
 		return cErr
 	}
-
 
 	// Create handlers
 	invManager := ecinventory.NewManager(s.Configuration, busClients.inventoryEventsProducer, busClients.inventoryOpsProducer, clients.agentClient)
@@ -109,7 +120,7 @@ func (s *Service) Run() error {
 	grpc_edge_inventory_proxy_go.RegisterEdgeInventoryProxyServer(grpcServer, invHandler)
 	grpc_edge_inventory_proxy_go.RegisterEdgeControllerProxyServer(grpcServer, proxyHandler)
 
-	if s.Configuration.Debug{
+	if s.Configuration.Debug {
 		log.Info().Msg("Enabling gRPC server reflection")
 		// Register reflection service on gRPC server.
 		reflection.Register(grpcServer)

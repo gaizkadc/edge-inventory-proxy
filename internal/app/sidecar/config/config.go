@@ -1,3 +1,19 @@
+/*
+ * Copyright 2019 Nalej
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package config
 
 import (
@@ -34,11 +50,11 @@ func (conf *Config) Validate() derrors.Error {
 	if conf.ProxyName == "" {
 		return derrors.NewInvalidArgumentError("proxyName cannot be empty")
 	}
-	if conf.NetworkManagerAddress == ""{
+	if conf.NetworkManagerAddress == "" {
 		return derrors.NewInvalidArgumentError("networkManagerAddress cannot be empty")
 	}
 
-	if conf.Username == "" || conf.Password == ""{
+	if conf.Username == "" || conf.Password == "" {
 		return derrors.NewInvalidArgumentError("username and password must be specified")
 	}
 

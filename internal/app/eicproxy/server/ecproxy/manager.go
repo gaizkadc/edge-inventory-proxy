@@ -1,5 +1,17 @@
 /*
- * Copyright (C) 2019 Nalej - All Rights Reserved
+ * Copyright 2019 Nalej
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package ecproxy
@@ -29,13 +41,13 @@ type Manager struct {
 	config config.Config
 }
 
-func NewManager(config config.Config) Manager{
+func NewManager(config config.Config) Manager {
 	return Manager{
 		config: config,
 	}
 }
 
-func (m*Manager) getIP(dnsName string) (*string, error){
+func (m *Manager) getIP(dnsName string) (*string, error) {
 	resolver := &net.Resolver{
 		PreferGo: true,
 		Dial: func(ctx context.Context, network, address string) (net.Conn, error) {
@@ -45,21 +57,21 @@ func (m*Manager) getIP(dnsName string) (*string, error){
 	}
 
 	ip, err := resolver.LookupIPAddr(context.Background(), dnsName)
-	if err != nil{
+	if err != nil {
 		log.Warn().Err(err).Msg("cannot resolve IP")
 		return nil, err
 	}
-	if len(ip) > 0{
+	if len(ip) > 0 {
 		ip := ip[0].IP.String()
 		return &ip, nil
 	}
 	return nil, errors.New("empty result")
 }
 
-func (m*Manager) getEICClient(edgeControllerID string) (grpc_edge_controller_go.EICClient, *grpc.ClientConn, derrors.Error){
+func (m *Manager) getEICClient(edgeControllerID string) (grpc_edge_controller_go.EICClient, *grpc.ClientConn, derrors.Error) {
 	dnsName := fmt.Sprintf("%s-vpn.service.nalej", edgeControllerID)
 	ecIP, err := m.getIP(dnsName)
-	if err != nil{
+	if err != nil {
 		return nil, nil, derrors.AsError(err, "cannot resolve IP address for EC")
 	}
 	ipAddr := fmt.Sprintf("%s:5577", *ecIP)
@@ -72,87 +84,87 @@ func (m*Manager) getEICClient(edgeControllerID string) (grpc_edge_controller_go.
 	return client, conn, nil
 }
 
-func (m*Manager) CloseConnection(conn *grpc.ClientConn){
+func (m *Manager) CloseConnection(conn *grpc.ClientConn) {
 	if conn != nil {
 		conn.Close()
 	}
 }
 
-func (m*Manager) InstallAgent(request *grpc_inventory_manager_go.InstallAgentRequest) (*grpc_inventory_manager_go.EdgeControllerOpResponse, error) {
+func (m *Manager) InstallAgent(request *grpc_inventory_manager_go.InstallAgentRequest) (*grpc_inventory_manager_go.EdgeControllerOpResponse, error) {
 	edgeClient, conn, aErr := m.getEICClient(request.EdgeControllerId)
 	defer m.CloseConnection(conn)
-	if aErr != nil{
+	if aErr != nil {
 		return nil, conversions.ToGRPCError(aErr)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
 	defer cancel()
 	response, err := edgeClient.InstallAgent(ctx, request)
-	if err != nil{
+	if err != nil {
 		return nil, m.ConvertError(err, "install agent")
 	}
 	log.Debug().Interface("response", response).Msg("install agent request sent")
 	return response, nil
 }
 
-func (m*Manager) CreateAgentJoinToken(edgeControllerID *grpc_inventory_go.EdgeControllerId) (*grpc_inventory_manager_go.AgentJoinToken, error) {
+func (m *Manager) CreateAgentJoinToken(edgeControllerID *grpc_inventory_go.EdgeControllerId) (*grpc_inventory_manager_go.AgentJoinToken, error) {
 	edgeClient, conn, aErr := m.getEICClient(edgeControllerID.EdgeControllerId)
 	defer m.CloseConnection(conn)
-	if aErr != nil{
+	if aErr != nil {
 		return nil, conversions.ToGRPCError(aErr)
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
 	defer cancel()
 	token, err := edgeClient.CreateAgentJoinToken(ctx, edgeControllerID)
-	if err != nil{
+	if err != nil {
 		return nil, m.ConvertError(err, "create agent-join-token")
 	}
 	log.Debug().Str("token", token.Token).Msg("agent join token has been created")
 	return token, nil
 }
 
-func (m*Manager) TriggerAgentOperation(request *grpc_inventory_manager_go.AgentOpRequest) (*grpc_inventory_manager_go.AgentOpResponse, error) {
+func (m *Manager) TriggerAgentOperation(request *grpc_inventory_manager_go.AgentOpRequest) (*grpc_inventory_manager_go.AgentOpResponse, error) {
 
 	edgeClient, conn, aErr := m.getEICClient(request.EdgeControllerId)
 	defer m.CloseConnection(conn)
-	if aErr != nil{
+	if aErr != nil {
 		return nil, conversions.ToGRPCError(aErr)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
 	defer cancel()
-	res, err :=  edgeClient.TriggerAgentOperation(ctx, request)
+	res, err := edgeClient.TriggerAgentOperation(ctx, request)
 	if err != nil {
 		return nil, m.ConvertError(err, "trigger agent operation")
 	}
 	return res, nil
 }
 
-func (m*Manager) Configure(request *grpc_inventory_manager_go.ConfigureEICRequest) (*grpc_common_go.Success, error) {
+func (m *Manager) Configure(request *grpc_inventory_manager_go.ConfigureEICRequest) (*grpc_common_go.Success, error) {
 	return nil, conversions.ToGRPCError(derrors.NewUnimplementedError("configure call not implemented"))
 }
 
-func (m*Manager) ListMetrics(selector *grpc_inventory_go.AssetSelector) (*grpc_monitoring_go.MetricsList, error) {
+func (m *Manager) ListMetrics(selector *grpc_inventory_go.AssetSelector) (*grpc_monitoring_go.MetricsList, error) {
 	edgeClient, conn, aErr := m.getEICClient(selector.GetEdgeControllerId())
 	defer m.CloseConnection(conn)
 
-	if aErr != nil{
+	if aErr != nil {
 		return nil, conversions.ToGRPCError(aErr)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
 	defer cancel()
-	metrics, err :=  edgeClient.ListMetrics(ctx, selector)
+	metrics, err := edgeClient.ListMetrics(ctx, selector)
 	if err != nil {
 		return nil, m.ConvertError(err, "list metrics")
 	}
 	return metrics, nil
 }
 
-func (m*Manager) QueryMetrics(request *grpc_monitoring_go.QueryMetricsRequest) (*grpc_monitoring_go.QueryMetricsResult, error) {
+func (m *Manager) QueryMetrics(request *grpc_monitoring_go.QueryMetricsRequest) (*grpc_monitoring_go.QueryMetricsResult, error) {
 	edgeClient, conn, aErr := m.getEICClient(request.GetAssets().GetEdgeControllerId())
 	defer m.CloseConnection(conn)
-	if aErr != nil{
+	if aErr != nil {
 		return nil, conversions.ToGRPCError(aErr)
 	}
 
@@ -165,22 +177,22 @@ func (m*Manager) QueryMetrics(request *grpc_monitoring_go.QueryMetricsRequest) (
 	return metrics, nil
 }
 
-func (m *Manager) UnlinkEC(edge *grpc_inventory_go.EdgeControllerId) (*grpc_common_go.Success, error){
+func (m *Manager) UnlinkEC(edge *grpc_inventory_go.EdgeControllerId) (*grpc_common_go.Success, error) {
 	log.Debug().Msg("UnlinkEIC received")
 
 	edgeClient, conn, aErr := m.getEICClient(edge.EdgeControllerId)
 	defer m.CloseConnection(conn)
 
-	if aErr != nil{
+	if aErr != nil {
 		return nil, conversions.ToGRPCError(aErr)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), ControllerTimeout)
 	defer cancel()
-	res, err :=  edgeClient.Unlink(ctx, &grpc_common_go.Empty{})
+	res, err := edgeClient.Unlink(ctx, &grpc_common_go.Empty{})
 	if err != nil {
 		return nil, m.ConvertError(err, "unlink")
-	}else {
+	} else {
 		return res, err
 	}
 }
@@ -189,7 +201,7 @@ func (m *Manager) UninstallAgent(assetID *grpc_inventory_manager_go.FullUninstal
 	edgeClient, conn, aErr := m.getEICClient(assetID.EdgeControllerId)
 	defer m.CloseConnection(conn)
 
-	if aErr != nil{
+	if aErr != nil {
 		return nil, conversions.ToGRPCError(aErr)
 	}
 
@@ -200,19 +212,19 @@ func (m *Manager) UninstallAgent(assetID *grpc_inventory_manager_go.FullUninstal
 
 	if err != nil {
 		return nil, m.ConvertError(err, "uninstall agent")
-	}else {
+	} else {
 		return res, err
 	}
 
 }
 
-func (m *Manager) ConvertError(err error, msg string)  error {
+func (m *Manager) ConvertError(err error, msg string) error {
 
 	if conversions.ToDerror(err).Type() == derrors.Unavailable ||
-		conversions.ToDerror(err).Type() == derrors.DeadlineExceeded{
+		conversions.ToDerror(err).Type() == derrors.DeadlineExceeded {
 		return conversions.ToGRPCError(derrors.NewUnavailableError(
 			fmt.Sprintf("unable to %s, EC not connected", msg), err))
-	}else{
+	} else {
 		return err
 	}
 
