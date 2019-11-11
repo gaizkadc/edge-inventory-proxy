@@ -8,7 +8,6 @@
     "edge-inventory-proxy eip-sidecar"
   ],
   "tools": [
-    "azure",
     "k8s",
     "docker"
   ]
