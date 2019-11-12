@@ -1,15 +1,7 @@
-#
-# Copyright (C) 2018 Nalej Group - All Rights Reserved
-#
+FROM alpine:3.9.4
 
-# iron/go is the alpine image with only ca-certificates added
-FROM iron/go
-
-# Now just add the binary\
-RUN mkdir /nalej
 EXPOSE 5544/tcp
 
-# Now just add the binary
 COPY edge-inventory-proxy /nalej/
 
 ENTRYPOINT ["./nalej/edge-inventory-proxy"]
