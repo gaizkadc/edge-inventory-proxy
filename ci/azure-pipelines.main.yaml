@@ -25,7 +25,7 @@ jobs:
   - job: MainWorkflow
 
     pool:
-      vmImage: 'ubunut-latest'
+      vmImage: 'ubuntu-latest'
 
     steps:
       - template: misc/variables.yaml@ci_templates
