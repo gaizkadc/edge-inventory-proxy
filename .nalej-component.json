@@ -8,6 +8,9 @@
   "image_list": [
     "edge-inventory-proxy eip-sidecar"
   ],
+  "component_list": [
+    "edge-inventory-proxy"
+  ],
   "tools": [
     "k8s",
     "docker"
