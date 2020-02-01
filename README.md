@@ -1,7 +1,7 @@
 # edge-inventory-proxy
 
 This component receives data from the [edge-controller](https://github.com/nalej/edge-controller)
-and send it to the [inventory-manager](https://github.com/nalej/inventory-manager).
+and sends it to the [inventory-manager](https://github.com/nalej/inventory-manager).
 ​
 ## Getting Started
 ​
@@ -20,8 +20,7 @@ In order to build and compile this repository use the provided Makefile:
 make all
 ```
 ​
-This operation generates the binaries for this repo, download dependencies,
-run existing tests and generate ready-to-deploy Kubernetes files.
+This operation generates the binaries for this repo, downloads the required dependencies, runs existing tests and generates ready-to-deploy Kubernetes files.
 ​
 ### Run tests
 ​
@@ -54,7 +53,7 @@ Please read [contributing.md](contributing.md) for details on our code of conduc
 ​
 ## Versioning
 ​
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/nalej/edge-inventory-proxy/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the available versions, see the [tags on this repository](https://github.com/nalej/edge-inventory-proxy/tags). 
 ​
 ## Authors
 ​
